@@ -1,0 +1,64 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.6.RELEASE'
+        javaVersion = '1.8'
+
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'maven-publish'
+
+    group 'com.trabricks.boot'
+
+    targetCompatibility = javaVersion
+    sourceCompatibility = javaVersion
+
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        }
+
+        dependencies {
+            dependency 'com.google.guava:guava:27.0.1-jre'
+            dependency 'org.apache.commons:commons-lang3:3.8.1'
+            dependency 'jmimemagic:jmimemagic:0.1.2'
+        }
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testCompile 'org.projectlombok:lombok'
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from(components.java)
+            }
+        }
+        repositories {
+            maven {
+                url = 'https://mvn.creamcookie.cc/content/repositories/m2/'
+                credentials {
+                    username getProperty('nexusUser')
+                    password getProperty('nexusPassword')
+                }
+            }
+        }
+    }
+}

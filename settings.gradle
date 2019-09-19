@@ -1,0 +1,4 @@
+rootProject.name = 'trabricks-spring-boot-starters'
+include 'trabricks-spring-boot-starter-web'
+include 'trabricks-spring-boot-starter-data-jpa'
+
