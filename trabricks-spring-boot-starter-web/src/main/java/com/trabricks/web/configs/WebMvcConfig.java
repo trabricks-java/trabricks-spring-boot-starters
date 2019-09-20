@@ -1,6 +1,11 @@
 package com.trabricks.web.configs;
 
+import com.trabricks.web.common.CommonRestControllerAdvice;
+import com.trabricks.web.interceptors.WebInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
@@ -8,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -67,6 +73,24 @@ public class WebMvcConfig implements WebMvcConfigurer {
     messageSource.setBasename("classpath:/i18n/messages");
     messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public ModelMapper modelMapper() {
+    ModelMapper modelMapper = new ModelMapper();
+    modelMapper.getConfiguration()
+        .setPropertyCondition(Conditions.isNotNull())
+        .setMatchingStrategy(MatchingStrategies.STRICT)
+        .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
+        .setFieldMatchingEnabled(true);
+    return modelMapper;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(annotation = RestControllerAdvice.class)
+  public CommonRestControllerAdvice commonRestControllerAdvice() {
+    return new CommonRestControllerAdvice(modelMapper());
   }
 
 }

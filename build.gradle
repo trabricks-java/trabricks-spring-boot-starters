@@ -32,6 +32,9 @@ subprojects {
         }
 
         dependencies {
+            dependency 'com.github.darrachequesne:spring-data-jpa-datatables:5.0.0'
+            dependency 'org.modelmapper:modelmapper:2.3.5'
+            dependency 'org.hibernate:hibernate-validator:6.0.16.Final'
             dependency 'com.google.guava:guava:27.0.1-jre'
             dependency 'org.apache.commons:commons-lang3:3.8.1'
             dependency 'jmimemagic:jmimemagic:0.1.2'
@@ -42,7 +45,8 @@ subprojects {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testCompile 'org.projectlombok:lombok'
-        testCompile group: 'junit', name: 'junit', version: '4.12'
+        testCompile 'junit:junit:4.12'
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
     }
 
     publishing {
