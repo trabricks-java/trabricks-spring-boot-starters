@@ -45,11 +45,13 @@ subprojects {
             dependency 'jmimemagic:jmimemagic:0.1.2'
             dependency 'org.hibernate:hibernate-validator:6.0.16.Final'
             dependency 'com.github.darrachequesne:spring-data-jpa-datatables:5.0.0'
+            dependency 'io.pebbletemplates:pebble-spring-boot-2-starter:3.0.6'
+            dependency 'com.hectorlopezfernandez.pebble:spring-security-extension:2.0.0'
         }
     }
 
     dependencies {
-        compile 'com.trabricks.boot:trabricks-spring-boot-starter-commons:1.0.1'
+        compile 'com.trabricks.boot:trabricks-spring-boot-starter-commons:1.0.2'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testCompile 'org.projectlombok:lombok'

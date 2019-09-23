@@ -1,8 +1,0 @@
-version '1.0.0'
-
-dependencies {
-    compile('jmimemagic:jmimemagic:0.1.2') {
-        exclude module: 'log4j'
-        exclude module: 'xercesImpl'
-    }
-}
