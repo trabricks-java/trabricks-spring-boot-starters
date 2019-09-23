@@ -1,4 +1,4 @@
-package com.trabricks.data.jpa.common;
+package com.trabricks.data.jpa.support;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
