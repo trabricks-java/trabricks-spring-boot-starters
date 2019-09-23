@@ -18,6 +18,10 @@ version '1.0.0'
 subprojects {
     repositories {
         mavenCentral()
+
+        maven {
+            url = 'https://mvn.creamcookie.cc/content/repositories/m2/'
+        }
     }
 
     apply plugin: 'java'
@@ -35,16 +39,17 @@ subprojects {
         }
 
         dependencies {
-            dependency 'com.github.darrachequesne:spring-data-jpa-datatables:5.0.0'
             dependency 'org.modelmapper:modelmapper:2.3.5'
-            dependency 'org.hibernate:hibernate-validator:6.0.16.Final'
             dependency 'com.google.guava:guava:27.0.1-jre'
             dependency 'org.apache.commons:commons-lang3:3.8.1'
             dependency 'jmimemagic:jmimemagic:0.1.2'
+            dependency 'org.hibernate:hibernate-validator:6.0.16.Final'
+            dependency 'com.github.darrachequesne:spring-data-jpa-datatables:5.0.0'
         }
     }
 
     dependencies {
+        compile 'com.trabricks.boot:trabricks-spring-boot-starter-commons:1.0.1'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testCompile 'org.projectlombok:lombok'

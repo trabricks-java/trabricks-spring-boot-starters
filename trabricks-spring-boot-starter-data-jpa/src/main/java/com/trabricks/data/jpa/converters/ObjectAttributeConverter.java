@@ -1,4 +1,4 @@
-package com.trabricks.data.jpa.support;
+package com.trabricks.data.jpa.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.persistence.AttributeConverter;

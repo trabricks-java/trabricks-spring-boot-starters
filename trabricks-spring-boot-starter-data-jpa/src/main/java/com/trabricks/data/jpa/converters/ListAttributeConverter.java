@@ -1,4 +1,4 @@
-package com.trabricks.data.jpa.support;
+package com.trabricks.data.jpa.converters;
 
 import java.util.List;
 import javax.persistence.Converter;

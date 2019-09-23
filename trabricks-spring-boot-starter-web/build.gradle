@@ -1,11 +1,7 @@
-version '1.0.11'
+version '1.0.14'
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-autoconfigure'
-
-    implementation 'com.google.guava:guava'
-    implementation 'org.modelmapper:modelmapper'
-
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
 }
