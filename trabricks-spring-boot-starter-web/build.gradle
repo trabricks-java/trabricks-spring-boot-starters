@@ -5,6 +5,10 @@ dependencies {
     compile 'io.pebbletemplates:pebble-spring-boot-2-starter'
     compile 'com.hectorlopezfernandez.pebble:spring-security-extension'
     compile 'org.springframework.boot:spring-boot-autoconfigure'
+    compile('jmimemagic:jmimemagic:0.1.2') {
+        exclude module: 'log4j'
+        exclude module: 'xercesImpl'
+    }
     implementation project(':trabricks-spring-boot-starter-mail')
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
 }
