@@ -1,8 +1,10 @@
 package com.trabricks.web.configs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trabricks.commons.configs.CommonConfig;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
+import com.trabricks.web.pebble.PebbleViewExtention;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,10 +30,11 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@AutoConfigureAfter(value={WebMvcAutoConfiguration.class, CommonConfig.class})
+@AutoConfigureAfter(value = {WebMvcAutoConfiguration.class, CommonConfig.class})
 public class WebMvcConfig implements WebMvcConfigurer {
 
   private final ModelMapper modelMapper;
+  private final ObjectMapper objectMapper;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -82,6 +85,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @ConditionalOnMissingBean(annotation = RestControllerAdvice.class)
   public CommonRestControllerAdvice commonRestControllerAdvice() {
     return new CommonRestControllerAdvice(modelMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public PebbleViewExtention pebbleViewExtention() {
+    return new PebbleViewExtention(messageSourceAccessor(), objectMapper);
   }
 
 }
