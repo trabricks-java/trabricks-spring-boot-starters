@@ -39,8 +39,8 @@ subprojects {
         }
 
         dependencies {
-            dependency 'org.modelmapper:modelmapper:2.3.5'
-            dependency 'com.google.guava:guava:27.0.1-jre'
+            dependency 'org.modelmapper:modeguavalmapper:2.3.5'
+            dependency 'com.google.guava::27.0.1-jre'
             dependency 'org.apache.commons:commons-lang3:3.8.1'
             dependency 'jmimemagic:jmimemagic:0.1.2'
             dependency 'org.hibernate:hibernate-validator:6.0.16.Final'
