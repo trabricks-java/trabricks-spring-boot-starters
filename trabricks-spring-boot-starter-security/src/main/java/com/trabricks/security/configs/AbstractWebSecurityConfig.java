@@ -5,15 +5,13 @@ import com.trabricks.security.support.RestAuthenticationFailureHandler;
 import com.trabricks.security.support.RestAuthenticationSuccessHandler;
 import com.trabricks.security.support.RestLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,12 +21,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @since 2019-09-24
  */
 @RequiredArgsConstructor
-@Configuration
-@EnableWebSecurity
-@AutoConfigureAfter(SecurityAutoConfiguration.class)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+  }
 
   @Override
   @Bean
@@ -37,15 +35,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManagerBean();
   }
 
-//  @Override
-//  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//    auth.userDetailsService(accountService).passwordEncoder(passwordEncoder());
-//  }
-
   @Override
   public void configure(WebSecurity web) {
     web.ignoring().mvcMatchers("/docs/index.html");
     web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+        .exceptionHandling()
+        .authenticationEntryPoint(restAuthenticationEntryPoint())
+    ;
+    this.configureHttpSecurity(http);
+  }
+
+  protected void configureHttpSecurity(HttpSecurity http) throws Exception {
+    http
+        .authorizeRequests()
+        .antMatchers("/admin/**").hasAnyRole("ADMIN")
+        .anyRequest().permitAll();
   }
 
   @Bean
@@ -77,5 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public RestLogoutSuccessHandler restLogoutSuccessHandler() {
     return new RestLogoutSuccessHandler();
   }
+
 
 }
