@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,9 +33,12 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
   @Autowired
   private WebSecurityProperties webSecurityProperties;
 
+  @Autowired
+  private UserDetailsService userDetailsService;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
   @Override
@@ -57,6 +61,7 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
 
     http
         .formLogin()
+        .loginPage("/login")
         .and()
         .logout()
         .logoutUrl("/logout");

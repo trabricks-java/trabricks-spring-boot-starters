@@ -2,6 +2,7 @@ package com.trabricks.web.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trabricks.commons.configs.CommonConfig;
+import com.trabricks.web.common.CommonControllerAdvice;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
 import com.trabricks.web.pebble.PebbleViewExtention;
@@ -15,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
@@ -35,6 +38,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   private final ModelMapper modelMapper;
   private final ObjectMapper objectMapper;
+  private final Environment environment;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -85,6 +89,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @ConditionalOnMissingBean(annotation = RestControllerAdvice.class)
   public CommonRestControllerAdvice commonRestControllerAdvice() {
     return new CommonRestControllerAdvice(modelMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(annotation = ControllerAdvice.class)
+  public CommonControllerAdvice commonControllerAdvice() {
+    return new CommonControllerAdvice(environment);
   }
 
   @Bean
