@@ -50,7 +50,7 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
 
   @Override
   public void configure(WebSecurity web) {
-    web.ignoring().mvcMatchers("/docs/index.html");
+    web.ignoring().mvcMatchers("/docs/index.html", "/vendors/**");
     web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
   }
 
@@ -62,6 +62,7 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
     http
         .formLogin()
         .loginPage("/login")
+        .permitAll()
         .and()
         .logout()
         .logoutUrl("/logout");
