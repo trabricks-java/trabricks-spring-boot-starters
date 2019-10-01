@@ -58,8 +58,6 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    System.out.println(webSecurityProperties);
-
     clients.inMemory()
         .withClient(webSecurityProperties.getOauth().getClientId())
         .authorizedGrantTypes("password", "refresh_token", "client_credentials")
