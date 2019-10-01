@@ -1,8 +1,9 @@
-version '1.0.35'
+version '1.0.51'
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
     compile 'org.springframework.boot:spring-boot-autoconfigure'
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
 }

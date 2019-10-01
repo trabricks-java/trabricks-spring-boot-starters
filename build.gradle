@@ -47,6 +47,7 @@ subprojects {
             dependency 'com.github.darrachequesne:spring-data-jpa-datatables:5.0.0'
             dependency 'io.pebbletemplates:pebble-spring-boot-2-starter:3.0.6'
             dependency 'com.hectorlopezfernandez.pebble:spring-security-extension:2.0.0'
+            dependency 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.8.RELEASE'
         }
     }
 
