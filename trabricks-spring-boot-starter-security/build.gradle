@@ -1,4 +1,4 @@
-version '1.0.51'
+version '1.0.59'
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'

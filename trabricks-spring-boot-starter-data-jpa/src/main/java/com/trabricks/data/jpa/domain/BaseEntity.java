@@ -31,10 +31,8 @@ public abstract class BaseEntity implements Serializable {
   @EqualsAndHashCode.Include
   private Long id;
 
-  @Column
   private LocalDateTime createdAt = LocalDateTime.now();
 
-  @Column
   @LastModifiedDate
   private LocalDateTime updatedOn;
 

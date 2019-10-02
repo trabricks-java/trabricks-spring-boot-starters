@@ -2,7 +2,6 @@ package com.trabricks.security.configs;
 
 import com.trabricks.security.properties.WebSecurityProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration;
@@ -37,9 +36,7 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
 
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
-
-  @Autowired
-  private WebSecurityProperties webSecurityProperties;
+  private final WebSecurityProperties webSecurityProperties;
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
