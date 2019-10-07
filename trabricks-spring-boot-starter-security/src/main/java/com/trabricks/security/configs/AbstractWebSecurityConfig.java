@@ -5,6 +5,8 @@ import com.trabricks.security.support.RestAuthenticationEntryPoint;
 import com.trabricks.security.support.RestAuthenticationFailureHandler;
 import com.trabricks.security.support.RestAuthenticationSuccessHandler;
 import com.trabricks.security.support.RestLogoutSuccessHandler;
+import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
  * @author eomjeongjae
@@ -85,6 +89,21 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
 
   protected void configureHttpSecurity(HttpSecurity http) throws Exception {
     // nothing
+  }
+
+  private class CsrfSecurityRequestMatcher implements RequestMatcher {
+    private Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
+    private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
+        "/files|/lambda/dataTables.json", null);
+
+    @Override
+    public boolean matches(HttpServletRequest request) {
+      if (allowedMethods.matcher(request.getMethod()).matches()) {
+        return false;
+      }
+
+      return !unprotectedMatcher.matches(request);
+    }
   }
 
   @Bean

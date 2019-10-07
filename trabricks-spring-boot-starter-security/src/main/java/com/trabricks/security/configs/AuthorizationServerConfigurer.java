@@ -60,8 +60,8 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
         .authorizedGrantTypes("password", "refresh_token", "client_credentials")
         .scopes("read", "write")
         .secret(this.passwordEncoder.encode(webSecurityProperties.getOauth().getClientSecret()))
-        .accessTokenValiditySeconds(10 * 60)
-        .refreshTokenValiditySeconds(6 * 10 * 60);
+        .accessTokenValiditySeconds(7 * 24 * 60 * 60)
+        .refreshTokenValiditySeconds(8 * 24 * 60 * 60);
   }
 
   @Bean
