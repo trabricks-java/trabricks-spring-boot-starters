@@ -1,4 +1,4 @@
-version '1.0.18'
+version '1.0.19'
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
@@ -11,4 +11,5 @@ dependencies {
     }
     implementation project(':trabricks-spring-boot-starter-mail')
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }

@@ -1,4 +1,4 @@
-package com.trabricks.web.file.service;
+package com.trabricks.web.storage.service;
 
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -13,7 +13,7 @@ public interface StorageService {
 
   void init();
 
-  void store(MultipartFile file);
+  void store(MultipartFile file, String serverFilename);
 
   Stream<Path> loadAll();
 

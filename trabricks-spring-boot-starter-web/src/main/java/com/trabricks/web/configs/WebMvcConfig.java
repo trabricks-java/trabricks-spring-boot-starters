@@ -6,12 +6,16 @@ import com.trabricks.web.common.CommonControllerAdvice;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
 import com.trabricks.web.pebble.PebbleViewExtention;
+import com.trabricks.web.storage.properties.StorageProperties;
+import com.trabricks.web.storage.service.FileSystemStorageService;
+import com.trabricks.web.storage.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -33,12 +37,14 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@EnableConfigurationProperties(StorageProperties.class)
 @AutoConfigureAfter(value = {WebMvcAutoConfiguration.class, CommonConfig.class})
 public class WebMvcConfig implements WebMvcConfigurer {
 
   private final ModelMapper modelMapper;
   private final ObjectMapper objectMapper;
   private final Environment environment;
+  private final StorageProperties storageProperties;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -101,6 +107,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @ConditionalOnMissingBean
   public PebbleViewExtention pebbleViewExtention() {
     return new PebbleViewExtention(messageSourceAccessor(), objectMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public StorageService storageService() {
+    return new FileSystemStorageService(storageProperties);
   }
 
 }
