@@ -1,6 +1,7 @@
-version '1.0.19'
+version '1.0.27'
 
 dependencies {
+    compile project(':trabricks-spring-boot-starter-commons')
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'io.pebbletemplates:pebble-spring-boot-2-starter'
     compile 'com.hectorlopezfernandez.pebble:spring-security-extension'

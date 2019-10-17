@@ -6,11 +6,13 @@ import com.trabricks.web.storage.properties.StorageProperties;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.Resource;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author eomjeongjae
  * @since 2019/10/15
  */
+@Slf4j
 @EnableConfigurationProperties(StorageProperties.class)
 public class FileSystemStorageService implements StorageService {
 
@@ -35,7 +38,7 @@ public class FileSystemStorageService implements StorageService {
   }
 
   @Override
-  public void store(MultipartFile file, String serverFilename) {
+  public void store(MultipartFile file, Path path) {
     String filename = StringUtils.cleanPath(file.getOriginalFilename());
     try {
       if (file.isEmpty()) {
@@ -47,8 +50,18 @@ public class FileSystemStorageService implements StorageService {
             "Cannot store file with relative path outside current directory "
                 + filename);
       }
+
+      Path target = this.rootLocation.resolve(path);
+      log.info("target: {}", target);
+      log.info("Files.isDirectory(target): {}", Files.isDirectory(target));
+      if (Files.isDirectory(target)) {
+        throw new StorageException(
+            "The path is not a file " + target);
+      }
+
+      createDirectory(target.getParent());
       try (InputStream inputStream = file.getInputStream()) {
-        Files.copy(inputStream, this.rootLocation.resolve(serverFilename),
+        Files.copy(inputStream, target,
             StandardCopyOption.REPLACE_EXISTING);
       }
     } catch (IOException e) {
@@ -83,7 +96,6 @@ public class FileSystemStorageService implements StorageService {
       } else {
         throw new StorageFileNotFoundException(
             "Could not read file: " + filename);
-
       }
     } catch (MalformedURLException e) {
       throw new StorageFileNotFoundException("Could not read file: " + filename, e);
@@ -102,6 +114,14 @@ public class FileSystemStorageService implements StorageService {
       Files.createDirectories(rootLocation);
     } catch (IOException e) {
       throw new StorageException("Could not initialize storage", e);
+    }
+  }
+
+  private void createDirectory(Path path) throws IOException {
+    try {
+      Files.createDirectories(path);
+    } catch (FileAlreadyExistsException e) {
+      log.error("File already exists: {}", e.getMessage());
     }
   }
 

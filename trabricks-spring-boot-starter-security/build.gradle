@@ -1,6 +1,7 @@
 version '1.0.59'
 
 dependencies {
+    compile project(':trabricks-spring-boot-starter-commons')
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'

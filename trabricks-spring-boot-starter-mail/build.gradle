@@ -1,6 +1,7 @@
 version '1.0.0'
 
 dependencies {
+    compile project(':trabricks-spring-boot-starter-commons')
     compile 'org.springframework.boot:spring-boot-starter-mail'
     compile 'org.springframework.boot:spring-boot-autoconfigure'
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'

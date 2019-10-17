@@ -1,9 +1,9 @@
 version '1.0.3'
 
 dependencies {
-    implementation 'com.google.guava:guava'
-    implementation 'org.apache.commons:commons-lang3'
-    implementation 'org.modelmapper:modelmapper'
+    compile 'com.google.guava:guava'
+    compile 'org.apache.commons:commons-lang3'
+    compile 'org.modelmapper:modelmapper'
 
     compile 'org.springframework.boot:spring-boot-autoconfigure'
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'

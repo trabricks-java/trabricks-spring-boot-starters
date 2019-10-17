@@ -2,7 +2,6 @@ buildscript {
     ext {
         springBootVersion = '2.1.6.RELEASE'
         javaVersion = '1.8'
-
     }
     repositories {
         mavenCentral()
@@ -20,7 +19,7 @@ subprojects {
         mavenCentral()
 
         maven {
-            url = 'https://mvn.creamcookie.cc/content/repositories/m2/'
+            url = 'https://mvn.trabricks.io/content/repositories/m2/'
         }
     }
 
@@ -52,7 +51,6 @@ subprojects {
     }
 
     dependencies {
-        compile 'com.trabricks.boot:trabricks-spring-boot-starter-commons:1.0.3'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testCompile 'org.projectlombok:lombok'
@@ -68,7 +66,7 @@ subprojects {
         }
         repositories {
             maven {
-                url = 'https://mvn.creamcookie.cc/content/repositories/m2/'
+                url = 'https://mvn.trabricks.io/content/repositories/m2/'
                 credentials {
                     username getProperty('nexusUser')
                     password getProperty('nexusPassword')
