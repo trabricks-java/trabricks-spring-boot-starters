@@ -1,6 +1,7 @@
 package com.trabricks.security.configs;
 
 import com.trabricks.security.properties.WebSecurityProperties;
+import com.trabricks.security.properties.WebSecurityProperties.Oauth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -55,13 +56,14 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    Oauth oauthProperties = webSecurityProperties.getOauth();
     clients.inMemory()
-        .withClient(webSecurityProperties.getOauth().getClientId())
+        .withClient(oauthProperties.getClientId())
         .authorizedGrantTypes("password", "refresh_token", "client_credentials")
         .scopes("read", "write")
-        .secret(this.passwordEncoder.encode(webSecurityProperties.getOauth().getClientSecret()))
-        .accessTokenValiditySeconds(7 * 24 * 60 * 60)
-        .refreshTokenValiditySeconds(8 * 24 * 60 * 60);
+        .secret(this.passwordEncoder.encode(oauthProperties.getClientSecret()))
+        .accessTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60)
+        .refreshTokenValiditySeconds((oauthProperties.getTokenValidityDays() + 1) * 24 * 60 * 60);
   }
 
   @Bean
