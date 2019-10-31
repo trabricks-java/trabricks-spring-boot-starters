@@ -28,7 +28,6 @@ public abstract class BaseEntity implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(unique = true, nullable = false)
-  @EqualsAndHashCode.Include
   private Long id;
 
   private LocalDateTime createdAt = LocalDateTime.now();

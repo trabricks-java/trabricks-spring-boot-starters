@@ -5,6 +5,9 @@ import com.trabricks.commons.configs.CommonConfig;
 import com.trabricks.web.common.CommonControllerAdvice;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
+import com.trabricks.web.notice.properties.FirebaseProperties;
+import com.trabricks.web.notice.service.DefaultFirebaseMessageServiceImpl;
+import com.trabricks.web.notice.service.FirebaseMessageService;
 import com.trabricks.web.pebble.PebbleViewExtention;
 import com.trabricks.web.storage.properties.StorageProperties;
 import com.trabricks.web.storage.service.FileSystemStorageService;
@@ -23,6 +26,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -37,7 +41,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(StorageProperties.class)
+@EnableConfigurationProperties({StorageProperties.class, FirebaseProperties.class})
 @AutoConfigureAfter(value = {WebMvcAutoConfiguration.class, CommonConfig.class})
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -45,6 +49,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
   private final ObjectMapper objectMapper;
   private final Environment environment;
   private final StorageProperties storageProperties;
+  private final FirebaseProperties firebaseProperties;
+  private final RestTemplate restTemplate;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -115,4 +121,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     return new FileSystemStorageService(storageProperties);
   }
 
+  @Bean
+  @ConditionalOnMissingBean
+  public FirebaseMessageService firebaseMessageService() {
+    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate, objectMapper);
+  }
 }

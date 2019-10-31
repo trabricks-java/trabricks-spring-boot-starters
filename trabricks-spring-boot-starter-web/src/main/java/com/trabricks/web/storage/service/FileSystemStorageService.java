@@ -14,7 +14,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.StringUtils;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 2019/10/15
  */
 @Slf4j
-@EnableConfigurationProperties(StorageProperties.class)
 public class FileSystemStorageService implements StorageService {
 
   private final Path rootLocation;
