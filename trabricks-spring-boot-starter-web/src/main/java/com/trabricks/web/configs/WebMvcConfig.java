@@ -2,7 +2,6 @@ package com.trabricks.web.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trabricks.commons.configs.CommonConfig;
-import com.trabricks.web.common.CommonControllerAdvice;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
 import com.trabricks.web.notice.properties.FirebaseProperties;
@@ -24,7 +23,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -101,12 +99,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @ConditionalOnMissingBean(annotation = RestControllerAdvice.class)
   public CommonRestControllerAdvice commonRestControllerAdvice() {
     return new CommonRestControllerAdvice(modelMapper);
-  }
-
-  @Bean
-  @ConditionalOnMissingBean(annotation = ControllerAdvice.class)
-  public CommonControllerAdvice commonControllerAdvice() {
-    return new CommonControllerAdvice(environment);
   }
 
   @Bean

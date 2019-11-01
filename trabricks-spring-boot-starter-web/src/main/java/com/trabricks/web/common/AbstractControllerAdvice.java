@@ -11,9 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
  * @author Jeongjae Eom
@@ -21,12 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  */
 @Slf4j
 @RequiredArgsConstructor
-@ControllerAdvice
-public class CommonControllerAdvice {
+abstract public class AbstractControllerAdvice {
 
   private final Environment environment;
 
-  @ModelAttribute
   public void addModelAttribute(ModelMap model) {
     model.addAttribute("environment", environment);
     model.addAttribute("isProduct", environment.acceptsProfiles(Profiles.of("prod")));
