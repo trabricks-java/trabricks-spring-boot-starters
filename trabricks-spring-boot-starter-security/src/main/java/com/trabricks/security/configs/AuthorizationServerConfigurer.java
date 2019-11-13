@@ -26,7 +26,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * @author eomjeongjae
  * @since 29/09/2019
  */
-
 @RequiredArgsConstructor
 @Configuration
 @AutoConfigureAfter(SpringBootWebSecurityConfiguration.class)
