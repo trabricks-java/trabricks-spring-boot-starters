@@ -4,9 +4,9 @@ import com.trabricks.commons.HtmlUtils;
 import com.trabricks.commons.Utils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @since 2019-01-03
  */
 @Slf4j
-@RequiredArgsConstructor
 abstract public class AbstractControllerAdvice {
 
-  private final Environment environment;
+  @Autowired
+  private Environment environment;
 
   public void addModelAttribute(ModelMap model) {
     model.addAttribute("environment", environment);

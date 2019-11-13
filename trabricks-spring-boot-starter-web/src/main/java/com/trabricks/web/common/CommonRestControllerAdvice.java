@@ -71,7 +71,7 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(HttpStatusException.class)
   protected ResponseEntity<Object> handleHttpStatusException(HttpStatusException ex) {
-    return errorResponseEntity(ex.getStatus(), ex);
+    return errorResponseEntity(ex.getStatus(), ex, ex.getCode());
   }
 
   @ExceptionHandler(Exception.class)

@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
@@ -18,6 +16,7 @@ import javax.persistence.criteria.Root;
 import lombok.Data;
 import org.hibernate.validator.internal.engine.groups.Group;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 
 public class Restrictions {
@@ -129,201 +128,195 @@ public class Restrictions {
   @SuppressWarnings("serial")
   public <T> Specification<T> output() {
 
-    Specification<T> spec = new Specification<T>() {
-      @SuppressWarnings({"rawtypes", "unchecked"})
-      @Override
-      public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    Specification<T> spec = (Specification<T>) (root, query, cb) -> {
 
-        List<Predicate> items = new ArrayList<Predicate>();
-        List<Order> orders = new ArrayList<Order>();
-        for (Condition condition : conditions) {
+      List<Predicate> items = new ArrayList<Predicate>();
+      List<Order> orders = new ArrayList<Order>();
+      for (Condition condition : conditions) {
 
-          String key = condition.getName().toString();
-          Object object = condition.getValue1();
-          Object object2 = condition.getValue2();
+        String key = condition.getName().toString();
+        Object object = condition.getValue1();
+        Object object2 = condition.getValue2();
 
-          switch (condition.type) {
-            case EQUALS: {
-              items.add(cb.equal(getPath(root, key), object));
-              break;
-            }
-            case EQUAL_PROPERTY: {
-              items.add(cb.equal(getPath(root, key), getPath(root, object.toString())));
-              break;
-            }
-            case NOT_EQUAL: {
-              items.add(cb.notEqual(getPath(root, key), object));
-              break;
-            }
-            case LIKE: {
-              items.add(cb.like(getPath(root, key), (String) object));
-              break;
-            }
-            case IS_NULL: {
-              items.add(cb.isNull(getPath(root, key)));
-              break;
-            }
-            case IS_NOT_NULL: {
-              items.add(cb.isNotNull(getPath(root, key)));
-              break;
-            }
-            case STR_IN: {
-              Predicate p = null;
-              Path<String> field = getPath(root, key);
-
-              Iterator itr = ((Collection) object).iterator();
-              while (itr.hasNext()) {
-                Object o = itr.next();
-                Predicate _p = cb.like(field.as(String.class), "%" + o + "%");
-                p = (p == null) ? _p : cb.or(p, _p);
-              }
-
-              items.add(p);
-              break;
-            }
-            case IN: {
-              final Path<Group> group = getPath(root, key);
-              items.add(group.in(object));
-              break;
-            }
-            case NOT_IN: {
-              final Path<Group> group = getPath(root, key);
-              items.add(group.in((Collection) object).not());
-              break;
-            }
-            case LESS_THAN_OR_EQUAL_TO: {
-              if (object instanceof Date) {
-                items.add(
-                    cb.lessThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
-              } else if (object instanceof LocalDateTime) {
-                items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key),
-                    (LocalDateTime) object));
-              } else if (object instanceof LocalDate) {
-                items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key),
-                    (LocalDate) object));
-              } else if (object instanceof LocalTime) {
-                items.add(cb.lessThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key),
-                    (LocalTime) object));
-              } else {
-                items.add(cb.le(Restrictions.<Number>getPath(root, key), (Number) object));
-              }
-              break;
-            }
-            case GREATER_THAN_OR_EQUAL_TO: {
-              if (object instanceof Date) {
-                items.add(
-                    cb.greaterThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
-              } else if (object instanceof LocalDateTime) {
-                items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key),
-                    (LocalDateTime) object));
-              } else if (object instanceof LocalDate) {
-                items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key),
-                    (LocalDate) object));
-              } else if (object instanceof LocalTime) {
-                items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key),
-                    (LocalTime) object));
-              } else {
-                items.add(cb.ge(Restrictions.<Number>getPath(root, key), (Number) object));
-              }
-              break;
-            }
-            case LESS_THAN_OR_IS_NULL: {
-              Path path = getPath(root, key);
-              if (object instanceof Date) {
-                items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (Date) object)));
-              } else if (object instanceof LocalDateTime) {
-                items.add(
-                    cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalDateTime) object)));
-              } else if (object instanceof LocalDate) {
-                items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalDate) object)));
-              } else if (object instanceof LocalTime) {
-                items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalTime) object)));
-              } else {
-                items.add(cb.or(cb.isNull(path), cb.le(path, (Number) object)));
-              }
-              break;
-            }
-            case GREATER_THAN_OR_IS_NULL: {
-              Path path = getPath(root, key);
-              if (object instanceof Date) {
-                items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (Date) object)));
-              } else if (object instanceof LocalDateTime) {
-                items.add(
-                    cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalDateTime) object)));
-              } else if (object instanceof LocalDate) {
-                items
-                    .add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalDate) object)));
-              } else if (object instanceof LocalTime) {
-                items
-                    .add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalTime) object)));
-              } else {
-                items.add(cb.or(cb.isNull(path), cb.ge(path, (Number) object)));
-              }
-              break;
-            }
-            case BETWEEN: {
-              if (object instanceof Date) {
-                items.add(cb.between(Restrictions.<Date>getPath(root, key), (Date) object,
-                    (Date) object2));
-              } else if (LocalDateTime.class.isAssignableFrom(object.getClass())) {
-                items.add(cb.between(Restrictions.getPath(root, key), (LocalDateTime) object,
-                    (LocalDateTime) object2));
-              } else if (LocalDate.class.isAssignableFrom(object.getClass())) {
-                items.add(cb.between(Restrictions.getPath(root, key), (LocalDate) object,
-                    (LocalDate) object2));
-              } else if (LocalTime.class.isAssignableFrom(object.getClass())) {
-                items.add(cb.between(Restrictions.getPath(root, key), (LocalTime) object,
-                    (LocalTime) object2));
-              } else {
-                items.add(
-                    cb.between(Restrictions.getPath(root, key), (Double) object, (Double) object2));
-              }
-              break;
-            }
-
-            case ORDER: {
-              if (object == Sort.Direction.DESC) {
-                orders.add(cb.desc(getPath(root, key)));
-              } else {
-                orders.add(cb.asc(getPath(root, key)));
-              }
-              break;
-            }
-
-            case ORDER_NEAR: {
-              orders.add(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"),
-                  cb.literal((Double) object), cb.literal((Double) object2))));
-              break;
-            }
-
-            case IN_NEAR: {
-              Expression fn = cb
-                  .function("distance", Double.class, root.get("lat"), root.get("lng"),
-                      cb.literal((Double) object), cb.literal((Double) object2));
-              items.add(cb.le(fn, (Double) condition.getName()));
-              break;
-            }
-
-            default:
-              break;
+        switch (condition.type) {
+          case EQUALS: {
+            items.add(cb.equal(getPath(root, key), object));
+            break;
           }
-        }
+          case EQUAL_PROPERTY: {
+            items.add(cb.equal(getPath(root, key), getPath(root, object.toString())));
+            break;
+          }
+          case NOT_EQUAL: {
+            items.add(cb.notEqual(getPath(root, key), object));
+            break;
+          }
+          case LIKE: {
+            items.add(cb.like(getPath(root, key), (String) object));
+            break;
+          }
+          case IS_NULL: {
+            items.add(cb.isNull(getPath(root, key)));
+            break;
+          }
+          case IS_NOT_NULL: {
+            items.add(cb.isNotNull(getPath(root, key)));
+            break;
+          }
+          case STR_IN: {
+            Predicate p = null;
+            Path<String> field = getPath(root, key);
 
-        if (orders.size() > 0) {
-          query.orderBy(orders);
-        }
+            Iterator itr = ((Collection) object).iterator();
+            while (itr.hasNext()) {
+              Object o = itr.next();
+              Predicate _p = cb.like(field.as(String.class), "%" + o + "%");
+              p = (p == null) ? _p : cb.or(p, _p);
+            }
 
-        if (items.size() > 1) {
-          Predicate[] ps = items.toArray(new Predicate[]{});
-          return (currCon == Conn.AND) ? cb.and(ps) : cb.or(ps);
-        } else if (items.size() == 1) {
-          return items.get(0);
-        }
+            items.add(p);
+            break;
+          }
+          case IN: {
+            final Path<Group> group = getPath(root, key);
+            items.add(group.in(object));
+            break;
+          }
+          case NOT_IN: {
+            final Path<Group> group = getPath(root, key);
+            items.add(group.in((Collection) object).not());
+            break;
+          }
+          case LESS_THAN_OR_EQUAL_TO: {
+            if (object instanceof Date) {
+              items.add(
+                  cb.lessThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
+            } else if (object instanceof LocalDateTime) {
+              items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key),
+                  (LocalDateTime) object));
+            } else if (object instanceof LocalDate) {
+              items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key),
+                  (LocalDate) object));
+            } else if (object instanceof LocalTime) {
+              items.add(cb.lessThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key),
+                  (LocalTime) object));
+            } else {
+              items.add(cb.le(Restrictions.<Number>getPath(root, key), (Number) object));
+            }
+            break;
+          }
+          case GREATER_THAN_OR_EQUAL_TO: {
+            if (object instanceof Date) {
+              items.add(
+                  cb.greaterThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
+            } else if (object instanceof LocalDateTime) {
+              items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key),
+                  (LocalDateTime) object));
+            } else if (object instanceof LocalDate) {
+              items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key),
+                  (LocalDate) object));
+            } else if (object instanceof LocalTime) {
+              items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key),
+                  (LocalTime) object));
+            } else {
+              items.add(cb.ge(Restrictions.<Number>getPath(root, key), (Number) object));
+            }
+            break;
+          }
+          case LESS_THAN_OR_IS_NULL: {
+            Path path = getPath(root, key);
+            if (object instanceof Date) {
+              items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (Date) object)));
+            } else if (object instanceof LocalDateTime) {
+              items.add(
+                  cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalDateTime) object)));
+            } else if (object instanceof LocalDate) {
+              items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalDate) object)));
+            } else if (object instanceof LocalTime) {
+              items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalTime) object)));
+            } else {
+              items.add(cb.or(cb.isNull(path), cb.le(path, (Number) object)));
+            }
+            break;
+          }
+          case GREATER_THAN_OR_IS_NULL: {
+            Path path = getPath(root, key);
+            if (object instanceof Date) {
+              items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (Date) object)));
+            } else if (object instanceof LocalDateTime) {
+              items.add(
+                  cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalDateTime) object)));
+            } else if (object instanceof LocalDate) {
+              items
+                  .add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalDate) object)));
+            } else if (object instanceof LocalTime) {
+              items
+                  .add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalTime) object)));
+            } else {
+              items.add(cb.or(cb.isNull(path), cb.ge(path, (Number) object)));
+            }
+            break;
+          }
+          case BETWEEN: {
+            if (object instanceof Date) {
+              items.add(cb.between(Restrictions.<Date>getPath(root, key), (Date) object,
+                  (Date) object2));
+            } else if (LocalDateTime.class.isAssignableFrom(object.getClass())) {
+              items.add(cb.between(Restrictions.getPath(root, key), (LocalDateTime) object,
+                  (LocalDateTime) object2));
+            } else if (LocalDate.class.isAssignableFrom(object.getClass())) {
+              items.add(cb.between(Restrictions.getPath(root, key), (LocalDate) object,
+                  (LocalDate) object2));
+            } else if (LocalTime.class.isAssignableFrom(object.getClass())) {
+              items.add(cb.between(Restrictions.getPath(root, key), (LocalTime) object,
+                  (LocalTime) object2));
+            } else {
+              items.add(
+                  cb.between(Restrictions.getPath(root, key), (Double) object, (Double) object2));
+            }
+            break;
+          }
 
-        return null;
+          case ORDER: {
+            if (object == Direction.DESC) {
+              orders.add(cb.desc(getPath(root, key)));
+            } else {
+              orders.add(cb.asc(getPath(root, key)));
+            }
+            break;
+          }
+
+          case ORDER_NEAR: {
+            orders.add(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"),
+                cb.literal((Double) object), cb.literal((Double) object2))));
+            break;
+          }
+
+          case IN_NEAR: {
+            Expression fn = cb
+                .function("distance", Double.class, root.get("lat"), root.get("lng"),
+                    cb.literal((Double) object), cb.literal((Double) object2));
+            items.add(cb.le(fn, (Double) condition.getName()));
+            break;
+          }
+
+          default:
+            break;
+        }
       }
 
+      if (orders.size() > 0) {
+        query.orderBy(orders);
+      }
 
+      if (items.size() > 1) {
+        Predicate[] ps = items.toArray(new Predicate[]{});
+        return (currCon == Conn.AND) ? cb.and(ps) : cb.or(ps);
+      } else if (items.size() == 1) {
+        return items.get(0);
+      }
+
+      return null;
     };
 
     if (children.size() > 0) {

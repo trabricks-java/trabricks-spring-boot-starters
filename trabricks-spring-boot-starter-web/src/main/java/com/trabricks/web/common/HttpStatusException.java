@@ -11,14 +11,21 @@ import org.springframework.http.HttpStatus;
 public class HttpStatusException extends RuntimeException{
 
   private final HttpStatus status;
+  private final String code;
 
   public HttpStatusException(HttpStatus status, String msg) {
-    super(msg);
-    this.status = status;
+    this(status, msg, null);
   }
 
-  public HttpStatusException(HttpStatus status, String msg, Throwable t) {
+  public HttpStatusException(HttpStatus status, String msg, String code) {
+    super(msg);
+    this.status = status;
+    this.code = code;
+  }
+
+  public HttpStatusException(HttpStatus status, String msg, String code, Throwable t) {
     super(msg, t);
     this.status = status;
+    this.code = code;
   }
 }
