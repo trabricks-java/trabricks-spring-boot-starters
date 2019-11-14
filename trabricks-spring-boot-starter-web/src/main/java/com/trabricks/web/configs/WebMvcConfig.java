@@ -11,6 +11,7 @@ import com.trabricks.web.pebble.PebbleViewExtention;
 import com.trabricks.web.storage.properties.StorageProperties;
 import com.trabricks.web.storage.service.FileSystemStorageService;
 import com.trabricks.web.storage.service.StorageService;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -48,7 +50,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
   private final Environment environment;
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
-  private final RestTemplate restTemplate;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -116,6 +117,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @Bean
   @ConditionalOnMissingBean
   public FirebaseMessageService firebaseMessageService() {
-    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate, objectMapper);
+    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate(restTemplateBuilder()), objectMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public RestTemplateBuilder restTemplateBuilder() {
+    return new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(1))
+        .setReadTimeout(Duration.ofSeconds(1));
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    return builder.build();
   }
 }
