@@ -18,7 +18,6 @@ import org.springframework.util.ObjectUtils;
 @ToString
 public abstract class SearchDto<T> {
 
-
   @ApiModelProperty(position = 98)
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate fromDate = LocalDate.now().minusMonths(5);
