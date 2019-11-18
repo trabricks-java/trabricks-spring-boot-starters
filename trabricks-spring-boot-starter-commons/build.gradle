@@ -1,13 +1,9 @@
-version '1.0.3'
+version '1.0.4'
 
 dependencies {
     compile 'com.google.guava:guava'
     compile 'org.apache.commons:commons-lang3'
     compile 'org.modelmapper:modelmapper'
-
-    compile 'io.springfox:springfox-swagger2'
-    compile 'io.springfox:springfox-swagger-ui'
-    compile "io.springfox:springfox-bean-validators"
 
     compile 'org.springframework.boot:spring-boot-autoconfigure'
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'

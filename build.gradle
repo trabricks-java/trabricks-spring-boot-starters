@@ -47,9 +47,6 @@ subprojects {
             dependency 'io.pebbletemplates:pebble-spring-boot-2-starter:3.0.6'
             dependency 'com.hectorlopezfernandez.pebble:spring-security-extension:2.0.0'
             dependency 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.8.RELEASE'
-            dependency 'io.springfox:springfox-swagger2:2.9.2'
-            dependency 'io.springfox:springfox-swagger-ui:2.9.2'
-            dependency "io.springfox:springfox-bean-validators:2.9.2"
         }
     }
 
