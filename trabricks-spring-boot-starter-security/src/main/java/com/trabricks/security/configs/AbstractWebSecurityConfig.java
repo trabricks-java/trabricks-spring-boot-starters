@@ -54,7 +54,15 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
 
   @Override
   public void configure(WebSecurity web) {
-    web.ignoring().mvcMatchers("/docs/index.html", "/vendors/**");
+    web.ignoring()
+        .mvcMatchers(
+            "/docs/index.html",
+            "/vendors/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**"
+        );
+
     web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
   }
 
@@ -92,6 +100,7 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
   }
 
   private class CsrfSecurityRequestMatcher implements RequestMatcher {
+
     private Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
     private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
         "/files|/lambda/dataTables.json", null);
