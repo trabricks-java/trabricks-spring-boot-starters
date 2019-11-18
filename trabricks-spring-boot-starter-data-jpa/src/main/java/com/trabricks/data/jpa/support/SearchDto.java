@@ -1,5 +1,6 @@
 package com.trabricks.data.jpa.support;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,15 +18,20 @@ import org.springframework.util.ObjectUtils;
 @ToString
 public abstract class SearchDto<T> {
 
+
+  @ApiModelProperty(position = 98)
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate fromDate = LocalDate.now().minusMonths(5);
 
+  @ApiModelProperty(position = 99)
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate toDate = LocalDate.now();
 
+  @ApiModelProperty(hidden = true)
   private LocalDateTime fromDateTime = LocalDateTime
       .of(LocalDate.now().minusMonths(5), LocalTime.MIN);
 
+  @ApiModelProperty(hidden = true)
   private LocalDateTime toDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
   public void setFromDate(LocalDate fromDate) {
