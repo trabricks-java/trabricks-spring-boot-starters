@@ -27,12 +27,16 @@ public abstract class SearchDto<T> {
   private LocalDate toDate;
 
   public final Specification<T> toSpecification() {
+    return getRestrictions().output();
+  }
+
+  public final Restrictions getRestrictions() {
     final Restrictions restrictions = this.generateRestrictions();
     if (!ObjectUtils.isEmpty(this.fromDate) && !ObjectUtils.isEmpty(this.toDate)) {
       restrictions.between("createdAt", LocalDateTime.of(this.fromDate, LocalTime.MIN),
           LocalDateTime.of(this.toDate, LocalTime.MAX));
     }
-    return restrictions.output();
+    return restrictions;
   }
 
   protected abstract Restrictions generateRestrictions();

@@ -46,8 +46,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
   private final ModelMapper modelMapper;
-  private final ObjectMapper objectMapper;
   private final Environment environment;
+  private final ObjectMapper objectMapper;
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
 
@@ -132,4 +132,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
   public RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder.build();
   }
+
+
 }

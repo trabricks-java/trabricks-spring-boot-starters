@@ -104,7 +104,7 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
 
     private Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
     private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
-        "/files|/lambda/dataTables.json", null);
+        "/files|/lambda|/dataTables.json", null);
 
     @Override
     public boolean matches(HttpServletRequest request) {
