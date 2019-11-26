@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -37,12 +38,14 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final WebSecurityProperties webSecurityProperties;
+  private final UserDetailsService userDetailsService;
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     endpoints
         .tokenStore(tokenStore())
         .accessTokenConverter(accessTokenConverter())
+        .userDetailsService(userDetailsService)
         .authenticationManager(authenticationManager);
   }
 
@@ -62,7 +65,7 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
         .scopes("read", "write")
         .secret(this.passwordEncoder.encode(oauthProperties.getClientSecret()))
         .accessTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60)
-        .refreshTokenValiditySeconds((oauthProperties.getTokenValidityDays() + 1) * 24 * 60 * 60);
+        .refreshTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60);
   }
 
   @Bean

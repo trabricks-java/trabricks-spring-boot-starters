@@ -37,6 +37,7 @@ public class WebSecurityProperties {
     private String clientSecret;
     private String tokenSigningKey;
     private int tokenValidityDays = 1;
+    private int refreshTokenValidityDays = 10;
 
   }
 
