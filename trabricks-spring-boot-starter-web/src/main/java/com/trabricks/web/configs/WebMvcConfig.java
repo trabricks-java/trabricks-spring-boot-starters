@@ -2,7 +2,6 @@ package com.trabricks.web.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hectorlopezfernandez.pebble.springsecurity.SpringSecurityExtension;
-import com.mitchellbosecke.pebble.extension.Extension;
 import com.trabricks.commons.configs.CommonConfig;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
@@ -106,13 +105,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Bean
   @ConditionalOnMissingBean
-  public Extension pebbleViewExtension() {
+  public PebbleViewExtension pebbleViewExtension() {
     return new PebbleViewExtension(messageSourceAccessor(), objectMapper);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  public Extension securityExtension() {
+  public SpringSecurityExtension securityExtension() {
     return new SpringSecurityExtension();
   }
 
