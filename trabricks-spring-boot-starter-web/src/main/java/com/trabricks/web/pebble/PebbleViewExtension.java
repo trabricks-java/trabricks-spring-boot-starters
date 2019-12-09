@@ -24,7 +24,7 @@ import org.springframework.context.support.MessageSourceAccessor;
  * @since 2019-09-23
  */
 @RequiredArgsConstructor
-public class PebbleViewExtention extends AbstractExtension {
+public class PebbleViewExtension extends AbstractExtension {
 
   private final MessageSourceAccessor messageSourceAccessor;
   private final ObjectMapper objectMapper;

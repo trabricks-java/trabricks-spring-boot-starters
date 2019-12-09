@@ -1,4 +1,4 @@
-version '1.0.40'
+version '1.0.43'
 
 dependencies {
     compile project(':trabricks-spring-boot-starter-commons')

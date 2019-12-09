@@ -39,15 +39,17 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity handleMethodArgumentNotValid(
-      MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status,
+      MethodArgumentNotValidException ex,
+      HttpHeaders headers,
+      HttpStatus status,
       WebRequest request) {
-    return errorResponseEntity(status, ex, ex.getBindingResult());
+    return errorResponseEntity(status, ex, "Method argument not valid", null, ex.getBindingResult());
   }
 
   @Override
   protected ResponseEntity<Object> handleBindException(
       BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    return errorResponseEntity(status, ex, ex.getBindingResult());
+    return errorResponseEntity(status, ex, "Method argument binding error", null, ex.getBindingResult());
   }
 
   @Override
@@ -81,19 +83,23 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
   }
 
   private ResponseEntity errorResponseEntity(HttpStatus status, Exception ex) {
-    return this.errorResponseEntity(status, ex, null, null);
+    return this.errorResponseEntity(status, ex, null, null, null);
   }
 
   private ResponseEntity errorResponseEntity(HttpStatus status, Exception ex,
       BindingResult bindingResult) {
-    return this.errorResponseEntity(status, ex, null, bindingResult);
+    return this.errorResponseEntity(status, ex, null, null, bindingResult);
   }
 
   private ResponseEntity errorResponseEntity(HttpStatus status, Exception ex, String code) {
-    return this.errorResponseEntity(status, ex, code, null);
+    return this.errorResponseEntity(status, ex, null, code, null);
   }
 
-  private ResponseEntity errorResponseEntity(HttpStatus status, Exception ex, String code,
+  private ResponseEntity errorResponseEntity(
+      HttpStatus status,
+      Exception ex,
+      String message,
+      String code,
       BindingResult bindingResult) {
     log.error("Error occurred", ex);
 
@@ -107,7 +113,7 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
         .body(ErrorResponse.builder()
             .status(status)
             .code(Objects.toString(code, ex.getClass().getSimpleName()))
-            .message(ex.getMessage())
+            .message(Objects.toString(message, ex.getMessage()))
             .fieldError(fieldErrors)
             .build());
   }

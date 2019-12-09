@@ -1,13 +1,15 @@
 package com.trabricks.web.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hectorlopezfernandez.pebble.springsecurity.SpringSecurityExtension;
+import com.mitchellbosecke.pebble.extension.Extension;
 import com.trabricks.commons.configs.CommonConfig;
 import com.trabricks.web.common.CommonRestControllerAdvice;
 import com.trabricks.web.interceptors.WebInterceptor;
 import com.trabricks.web.notice.properties.FirebaseProperties;
 import com.trabricks.web.notice.service.DefaultFirebaseMessageServiceImpl;
 import com.trabricks.web.notice.service.FirebaseMessageService;
-import com.trabricks.web.pebble.PebbleViewExtention;
+import com.trabricks.web.pebble.PebbleViewExtension;
 import com.trabricks.web.storage.properties.StorageProperties;
 import com.trabricks.web.storage.service.FileSystemStorageService;
 import com.trabricks.web.storage.service.StorageService;
@@ -104,8 +106,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Bean
   @ConditionalOnMissingBean
-  public PebbleViewExtention pebbleViewExtention() {
-    return new PebbleViewExtention(messageSourceAccessor(), objectMapper);
+  public Extension pebbleViewExtension() {
+    return new PebbleViewExtension(messageSourceAccessor(), objectMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public Extension securityExtension() {
+    return new SpringSecurityExtension();
   }
 
   @Bean
@@ -132,6 +140,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
   public RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder.build();
   }
-
 
 }
