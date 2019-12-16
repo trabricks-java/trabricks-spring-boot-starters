@@ -65,7 +65,8 @@ public class AuthorizationServerConfigurer extends AuthorizationServerConfigurer
         .scopes("read", "write")
         .secret(this.passwordEncoder.encode(oauthProperties.getClientSecret()))
         .accessTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60)
-        .refreshTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60);
+        .refreshTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60)
+    ;
   }
 
   @Bean
