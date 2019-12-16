@@ -26,4 +26,5 @@ public class FirebaseProperties {
   private String messageKey;
   private String host;
   private String privateKeyPath;
+
 }
