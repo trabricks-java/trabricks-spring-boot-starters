@@ -7,8 +7,6 @@ package com.trabricks.web.notice.service;
 
 public interface FirebaseMessageService {
 
-
   void sendMessage(FirebaseMessage firebaseMessage);
-
 
 }
