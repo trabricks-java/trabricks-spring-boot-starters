@@ -12,8 +12,6 @@ public interface FirebaseMessage {
 
   String getLink();
 
-  String getPushImageLink();
-
   String getToken();
 
 }
