@@ -61,7 +61,7 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/v2/api-docs",
-            "/webjars/**"
+            "/fonts/**"
         );
 
     web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
