@@ -6,12 +6,14 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.Maps;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.trabricks.web.notice.properties.FirebaseProperties;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +59,25 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
       FirebaseApp.initializeApp(options);
     } catch (IOException e) {
       log.error("Error FirebaseApp initializeApp", e);
+    }
+  }
+
+  @Override
+  public void sendMessage(List<Message> messages) {
+    try {
+      // Response is a message ID string
+      BatchResponse response = FirebaseMessaging.getInstance().sendAll(messages);
+      log.info("successCount: {}", response.getSuccessCount());
+      log.info("failureCount: {}", response.getFailureCount());
+
+      response.getResponses().stream()
+          .forEach(sendResponse -> {
+            log.info("messageId: {}", sendResponse.getMessageId());
+            log.info("isSuccessful: {}", sendResponse.isSuccessful());
+            log.info("exception: {}", sendResponse.getException());
+          });
+    } catch (FirebaseMessagingException e) {
+      log.error("Firebase send message error", e);
     }
   }
 

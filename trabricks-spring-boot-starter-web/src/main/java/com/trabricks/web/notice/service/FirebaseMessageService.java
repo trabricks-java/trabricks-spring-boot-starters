@@ -1,6 +1,7 @@
 package com.trabricks.web.notice.service;
 
 import com.google.firebase.messaging.Message;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,6 +10,8 @@ import java.util.Map;
  */
 
 public interface FirebaseMessageService {
+
+  void sendMessage(List<Message> messages);
 
   void sendMessage(Message message);
 
