@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -56,7 +57,9 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
           .setDatabaseUrl(firebaseProperties.getDatabaseUrl())
           .build();
 
-      FirebaseApp.initializeApp(options);
+      if (CollectionUtils.isEmpty(FirebaseApp.getApps())) {
+        FirebaseApp.initializeApp(options);
+      }
     } catch (IOException e) {
       log.error("Error FirebaseApp initializeApp", e);
     }
