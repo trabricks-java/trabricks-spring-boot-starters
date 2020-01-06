@@ -22,6 +22,6 @@ public class DefaultFirebaseMessage implements FirebaseMessage {
   private String title;
   private String body;
   private String link;
-  private String pushImageLink;
   private String token;
+
 }

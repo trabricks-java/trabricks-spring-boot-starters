@@ -2,10 +2,18 @@ package com.trabricks.web.notice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.Maps;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import com.trabricks.web.notice.properties.FirebaseProperties;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,6 +39,37 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
   private final FirebaseProperties firebaseProperties;
   private final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
+
+  // TODO: Firebase SDK 작업 추가 예정.
+  @PostConstruct
+  public void init() {
+    log.info("DefaultFirebaseMessageServiceImpl init");
+    try {
+      InputStream serviceAccount =
+          new ClassPathResource(firebaseProperties.getPrivateKeyPath())
+              .getInputStream();
+
+      FirebaseOptions options = new FirebaseOptions.Builder()
+          .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+          .setDatabaseUrl(firebaseProperties.getDatabaseUrl())
+          .build();
+
+      FirebaseApp.initializeApp(options);
+    } catch (IOException e) {
+      log.error("Error FirebaseApp initializeApp", e);
+    }
+  }
+
+  @Override
+  public void sendMessage(Message message) {
+    try {
+      // Response is a message ID string
+      String response = FirebaseMessaging.getInstance().send(message);
+      log.info("response: {}", response);
+    } catch (FirebaseMessagingException e) {
+      log.error("Firebase send message error", e);
+    }
+  }
 
   @Override
   public void sendMessage(FirebaseMessage firebaseMessage) {

@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -123,6 +124,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Bean
   @ConditionalOnMissingBean
+  @ConditionalOnProperty(prefix = "firebase", name = {"private-key-path", "database-url"})
   public FirebaseMessageService firebaseMessageService() {
     return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate(restTemplateBuilder()), objectMapper);
   }
