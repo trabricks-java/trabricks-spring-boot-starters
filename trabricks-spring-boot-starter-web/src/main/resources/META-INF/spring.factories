@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.trabricks.web.configs.WebMvcConfig
+  io.trabricks.boot.web.configs.WebMvcConfig

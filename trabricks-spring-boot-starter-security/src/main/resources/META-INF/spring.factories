@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.trabricks.security.configs.AuthorizationServerConfigurer
+  io.trabricks.boot.security.configs.AuthorizationServerConfigurer

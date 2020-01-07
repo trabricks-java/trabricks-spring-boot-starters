@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.trabricks.data.jpa.configs.DataJpaConfig
+  io.trabricks.boot.data.jpa.configs.DataJpaConfig

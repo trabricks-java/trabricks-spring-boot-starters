@@ -1,4 +1,4 @@
-version '1.0.54'
+version '1.0.0'
 
 dependencies {
     compile project(':trabricks-spring-boot-starter-commons')
@@ -16,4 +16,5 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compile 'com.google.firebase:firebase-admin:6.8.0'
 }
+
 

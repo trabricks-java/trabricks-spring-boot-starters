@@ -27,7 +27,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'maven-publish'
 
-    group 'com.trabricks.boot'
+    group 'io.trabricks.boot'
 
     targetCompatibility = javaVersion
     sourceCompatibility = javaVersion
