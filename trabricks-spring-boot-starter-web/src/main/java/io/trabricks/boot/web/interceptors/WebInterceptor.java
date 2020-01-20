@@ -14,6 +14,38 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class WebInterceptor implements HandlerInterceptor {
 
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
+    log.info("[preHandle][{}][{}{}]", request.getMethod(), request.getRequestURI(),
+        getParameters(request));
+
+    return true;
+  }
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+      ModelAndView modelAndView) throws Exception {
+    String usrAgent = request.getHeader("User-Agent");
+    if (usrAgent != null && !usrAgent.isEmpty() && usrAgent.contains("MSIE")) {
+      String v = usrAgent.substring(usrAgent.indexOf("MSIE") + 4).trim();
+      v = v.substring(0, v.indexOf(";"));
+      if (Float.parseFloat(v) <= 9.0) {
+        modelAndView.setViewName("shared/barricade");
+      }
+    }
+  }
+
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+      Object handler, Exception ex) throws Exception {
+    if (ex != null) {
+      ex.printStackTrace();
+      log.info("[afterCompletion][{}][{}{}][exception: {}]", request.getMethod(),
+          request.getMethod(), request.getRequestURI(), ex);
+    }
+  }
+
   private String getParameters(HttpServletRequest request) {
     StringBuffer posted = new StringBuffer();
     Enumeration<?> e = request.getParameterNames();
@@ -49,30 +81,5 @@ public class WebInterceptor implements HandlerInterceptor {
       return ipFromHeader;
     }
     return request.getRemoteAddr();
-  }
-
-  @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-      ModelAndView modelAndView) throws Exception {
-    String usrAgent = request.getHeader("User-Agent");
-    if (usrAgent != null && !usrAgent.isEmpty() && usrAgent.contains("MSIE")) {
-      String v = usrAgent.substring(usrAgent.indexOf("MSIE") + 4).trim();
-      v = v.substring(0, v.indexOf(";"));
-      if (Float.parseFloat(v) <= 9.0) {
-        modelAndView.setViewName("shared/barricade");
-      }
-    }
-    log.info("[postHandle][{}][{}{}]", request.getMethod(), request.getRequestURI(),
-        getParameters(request));
-  }
-
-  @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-      Object handler, Exception ex) throws Exception {
-    if (ex != null) {
-      ex.printStackTrace();
-      log.info("[afterCompletion][{}][{}{}][exception: {}]", request.getMethod(),
-          request.getMethod(), request.getRequestURI(), ex);
-    }
   }
 }
