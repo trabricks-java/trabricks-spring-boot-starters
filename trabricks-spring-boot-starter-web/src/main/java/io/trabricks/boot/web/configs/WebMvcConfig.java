@@ -48,14 +48,15 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
   private final ModelMapper modelMapper;
-  private final Environment environment;
   private final ObjectMapper objectMapper;
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(webInterceptor());
+    registry.addInterceptor(webInterceptor())
+        .excludePathPatterns("/css/**", "/js/**", "/static-bundle/**", "/i18n/**", "/webfonts/**",
+            "/assets/**", "/fonts/**", "/img/**", "/favicon.ico", "/webfonts");
     registry.addInterceptor(localeChangeInterceptor());
   }
 
