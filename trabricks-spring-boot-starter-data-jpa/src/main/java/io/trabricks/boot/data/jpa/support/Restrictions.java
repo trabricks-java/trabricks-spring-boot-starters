@@ -1,9 +1,9 @@
 package io.trabricks.boot.data.jpa.support;
 
+import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -21,8 +21,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class Restrictions {
 
-  private List<Condition> conditions = new ArrayList<Condition>();
-  private List<Restrictions> children = new ArrayList<Restrictions>();
+  private List<Condition> conditions = Lists.newArrayList();
+  private List<Restrictions> children = Lists.newArrayList();
   private Conn currCon;
 
   public Restrictions() {
@@ -127,13 +127,11 @@ public class Restrictions {
 
   @SuppressWarnings("serial")
   public <T> Specification<T> output() {
-
     Specification<T> spec = (Specification<T>) (root, query, cb) -> {
 
-      List<Predicate> items = new ArrayList<Predicate>();
-      List<Order> orders = new ArrayList<Order>();
+      List<Predicate> items = Lists.newArrayList();
+      List<Order> orders = Lists.newArrayList();
       for (Condition condition : conditions) {
-
         String key = condition.getName().toString();
         Object object = condition.getValue1();
         Object object2 = condition.getValue2();
@@ -179,7 +177,11 @@ public class Restrictions {
           }
           case IN: {
             final Path<Group> group = getPath(root, key);
-            items.add(group.in(object));
+            if (Collection.class.isAssignableFrom(object.getClass())) {
+              items.add(group.in((Collection) object));
+            } else {
+              items.add(group.in(object));
+            }
             break;
           }
           case NOT_IN: {
@@ -190,36 +192,36 @@ public class Restrictions {
           case LESS_THAN_OR_EQUAL_TO: {
             if (object instanceof Date) {
               items.add(
-                  cb.lessThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
+                  cb.lessThanOrEqualTo(Restrictions.getPath(root, key), (Date) object));
             } else if (object instanceof LocalDateTime) {
-              items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key),
+              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(root, key),
                   (LocalDateTime) object));
             } else if (object instanceof LocalDate) {
-              items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key),
+              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(root, key),
                   (LocalDate) object));
             } else if (object instanceof LocalTime) {
-              items.add(cb.lessThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key),
+              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(root, key),
                   (LocalTime) object));
             } else {
-              items.add(cb.le(Restrictions.<Number>getPath(root, key), (Number) object));
+              items.add(cb.le(Restrictions.getPath(root, key), (Number) object));
             }
             break;
           }
           case GREATER_THAN_OR_EQUAL_TO: {
             if (object instanceof Date) {
               items.add(
-                  cb.greaterThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
+                  cb.greaterThanOrEqualTo(Restrictions.getPath(root, key), (Date) object));
             } else if (object instanceof LocalDateTime) {
-              items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key),
+              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(root, key),
                   (LocalDateTime) object));
             } else if (object instanceof LocalDate) {
-              items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key),
+              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(root, key),
                   (LocalDate) object));
             } else if (object instanceof LocalTime) {
-              items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key),
+              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(root, key),
                   (LocalTime) object));
             } else {
-              items.add(cb.ge(Restrictions.<Number>getPath(root, key), (Number) object));
+              items.add(cb.ge(Restrictions.getPath(root, key), (Number) object));
             }
             break;
           }
