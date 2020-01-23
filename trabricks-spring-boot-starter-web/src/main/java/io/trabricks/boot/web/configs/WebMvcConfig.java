@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -55,7 +54,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(webInterceptor())
-        .excludePathPatterns("/css/**", "/js/**", "/static-bundle/**", "/i18n/**", "/webfonts/**",
+        .excludePathPatterns(
+            "/css/**", "/js/**", "/static-bundle/**", "/i18n/**", "/webfonts/**",
             "/assets/**", "/fonts/**", "/img/**", "/favicon.ico", "/webfonts");
     registry.addInterceptor(localeChangeInterceptor());
   }
@@ -119,6 +119,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Bean
   @ConditionalOnMissingBean
+  @ConditionalOnProperty(prefix = "storage", name = "location")
   public StorageService storageService() {
     return new FileSystemStorageService(storageProperties);
   }
