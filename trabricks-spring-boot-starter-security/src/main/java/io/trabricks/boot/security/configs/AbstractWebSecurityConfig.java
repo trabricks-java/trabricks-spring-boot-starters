@@ -96,8 +96,6 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
     this.configureHttpSecurity(http);
   }
 
-  // Error:(93, 33) Method annotated with @Bean is called directly. Use dependency injection instead.
-
   abstract void configureHttpSecurity(HttpSecurity http) throws Exception;
 
   private class CsrfSecurityRequestMatcher implements RequestMatcher {
