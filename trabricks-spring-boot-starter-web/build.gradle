@@ -1,4 +1,4 @@
-version '1.0.3'
+version '1.0.4'
 
 dependencies {
     compile project(':trabricks-spring-boot-starter-commons')
@@ -10,6 +10,12 @@ dependencies {
         exclude module: 'log4j'
         exclude module: 'xercesImpl'
     }
+
+    compile 'org.apache.poi:poi-ooxml:3.16' // .xlsx
+    compile 'org.apache.poi:poi:3.16' // .xls
+
+    // https://mvnrepository.com/artifact/eu.bitwalker/UserAgentUtils
+    compile 'eu.bitwalker:UserAgentUtils:1.21'
 
     implementation project(':trabricks-spring-boot-starter-mail')
     annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'

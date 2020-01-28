@@ -12,6 +12,7 @@ import io.trabricks.boot.web.pebble.PebbleViewExtension;
 import io.trabricks.boot.web.storage.properties.StorageProperties;
 import io.trabricks.boot.web.storage.service.FileSystemStorageService;
 import io.trabricks.boot.web.storage.service.StorageService;
+import io.trabricks.boot.web.views.excel.components.ExcelReader;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -143,5 +144,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
   public RestTemplate restTemplate() {
     return restTemplateBuilder().build();
   }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public ExcelReader excelReader() {
+    return new ExcelReader();
+  }
+
 
 }
