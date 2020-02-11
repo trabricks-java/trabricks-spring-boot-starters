@@ -2,9 +2,8 @@ package io.trabricks.boot.web.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hectorlopezfernandez.pebble.springsecurity.SpringSecurityExtension;
-import io.trabricks.boot.commons.configs.CommonConfig;
 import io.trabricks.boot.web.common.CommonRestControllerAdvice;
-import io.trabricks.boot.web.interceptors.WebInterceptor;
+import io.trabricks.boot.web.interceptors.WebLogInterceptor;
 import io.trabricks.boot.web.notice.properties.FirebaseProperties;
 import io.trabricks.boot.web.notice.service.DefaultFirebaseMessageServiceImpl;
 import io.trabricks.boot.web.notice.service.FirebaseMessageService;
@@ -13,14 +12,11 @@ import io.trabricks.boot.web.storage.properties.StorageProperties;
 import io.trabricks.boot.web.storage.service.FileSystemStorageService;
 import io.trabricks.boot.web.storage.service.StorageService;
 import io.trabricks.boot.web.views.excel.components.ExcelReader;
-import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -44,27 +40,36 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties({StorageProperties.class, FirebaseProperties.class})
-@AutoConfigureAfter(value = {WebMvcAutoConfiguration.class, CommonConfig.class})
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebAutoConfiguration implements WebMvcConfigurer {
 
   private final ModelMapper modelMapper;
   private final ObjectMapper objectMapper;
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
+  private final RestTemplate restTemplate;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(webInterceptor())
+    registry.addInterceptor(webLogInterceptor())
         .excludePathPatterns(
-            "/css/**", "/js/**", "/static-bundle/**", "/i18n/**", "/webfonts/**",
-            "/assets/**", "/fonts/**", "/img/**", "/favicon.ico", "/webfonts");
+            "/css/**",
+            "/js/**",
+            "/fonts/**",
+            "/img/**",
+            "/images/**",
+            "/webfonts/**",
+            "/i18n/**",
+            "/favicon.ico",
+            "/assets/**",
+            "/static-bundle/**"
+        );
     registry.addInterceptor(localeChangeInterceptor());
   }
 
   @Bean
-  @ConditionalOnMissingBean(name = "webInterceptor")
-  public HandlerInterceptor webInterceptor() {
-    return new WebInterceptor();
+  @ConditionalOnMissingBean
+  public HandlerInterceptor webLogInterceptor() {
+    return new WebLogInterceptor();
   }
 
   @Bean
@@ -129,20 +134,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = "firebase", name = {"private-key-path", "database-url"})
   public FirebaseMessageService firebaseMessageService() {
-    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate(), objectMapper);
+    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate, objectMapper);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  public RestTemplateBuilder restTemplateBuilder() {
-    return new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(1))
-        .setReadTimeout(Duration.ofSeconds(1));
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  public RestTemplate restTemplate() {
-    return restTemplateBuilder().build();
+  public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    return builder.build();
   }
 
   @Bean
@@ -150,6 +148,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
   public ExcelReader excelReader() {
     return new ExcelReader();
   }
-
 
 }

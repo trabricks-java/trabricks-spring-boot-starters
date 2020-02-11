@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.trabricks.boot.commons.configs.CommonConfig
+  io.trabricks.boot.commons.configs.CommonAutoConfiguration

@@ -12,11 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
  * @since 2019-02-08
  */
 @Slf4j
-public class WebInterceptor implements HandlerInterceptor {
+public class WebLogInterceptor implements HandlerInterceptor {
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-      throws Exception {
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     log.info("[preHandle][{}][{}{}]", request.getMethod(), request.getRequestURI(),
         getParameters(request));
 
@@ -25,7 +24,7 @@ public class WebInterceptor implements HandlerInterceptor {
 
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-      ModelAndView modelAndView) throws Exception {
+      ModelAndView modelAndView) {
     String usrAgent = request.getHeader("User-Agent");
     if (usrAgent != null && !usrAgent.isEmpty() && usrAgent.contains("MSIE")) {
       String v = usrAgent.substring(usrAgent.indexOf("MSIE") + 4).trim();
@@ -38,7 +37,7 @@ public class WebInterceptor implements HandlerInterceptor {
 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-      Object handler, Exception ex) throws Exception {
+      Object handler, Exception ex) {
     if (ex != null) {
       ex.printStackTrace();
       log.info("[afterCompletion][{}][{}{}][exception: {}]", request.getMethod(),

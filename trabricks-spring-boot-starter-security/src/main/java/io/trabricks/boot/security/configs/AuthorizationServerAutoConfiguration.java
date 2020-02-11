@@ -3,9 +3,7 @@ package io.trabricks.boot.security.configs;
 import io.trabricks.boot.security.properties.WebSecurityProperties;
 import io.trabricks.boot.security.properties.WebSecurityProperties.Oauth;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +25,12 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * @author eomjeongjae
  * @since 29/09/2019
  */
-@RequiredArgsConstructor
 @Configuration
-@AutoConfigureAfter(SpringBootWebSecurityConfiguration.class)
+@RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "trabricks.security", name = "oauth.enabled", havingValue = "true")
 @EnableAuthorizationServer
 @EnableConfigurationProperties(WebSecurityProperties.class)
-public class AuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
 
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;

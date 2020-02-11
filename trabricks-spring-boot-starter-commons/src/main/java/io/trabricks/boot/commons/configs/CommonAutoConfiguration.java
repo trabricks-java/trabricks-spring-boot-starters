@@ -3,6 +3,7 @@ package io.trabricks.boot.commons.configs;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
  * @since 2019-09-23
  */
 @Configuration
-public class CommonConfig {
+@ConditionalOnClass(ModelMapper.class)
+public class CommonAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
