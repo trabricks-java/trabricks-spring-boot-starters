@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class VCardTest {
 
   @Test
+  @Ignore
   public void createVCard() throws IOException {
     File f = new File("contact.vcf");
     FileOutputStream fop = new FileOutputStream(f);

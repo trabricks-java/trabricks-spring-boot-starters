@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author eomjeongjae
@@ -15,33 +14,36 @@ import org.springframework.web.servlet.ModelAndView;
 public class WebLogInterceptor implements HandlerInterceptor {
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-    log.info("[preHandle][{}][{}{}]", request.getMethod(), request.getRequestURI(),
-        getParameters(request));
-
+  public boolean preHandle(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Object handler
+  ) {
+    log.info(
+        "[preHandle][{}][{}{}]",
+        request.getMethod(),
+        request.getRequestURI(),
+        getParameters(request)
+    );
     return true;
   }
 
   @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-      ModelAndView modelAndView) {
-    String usrAgent = request.getHeader("User-Agent");
-    if (usrAgent != null && !usrAgent.isEmpty() && usrAgent.contains("MSIE")) {
-      String v = usrAgent.substring(usrAgent.indexOf("MSIE") + 4).trim();
-      v = v.substring(0, v.indexOf(";"));
-      if (Float.parseFloat(v) <= 9.0) {
-        modelAndView.setViewName("shared/barricade");
-      }
-    }
-  }
-
-  @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-      Object handler, Exception ex) {
+  public void afterCompletion(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Object handler,
+      Exception ex
+  ) {
     if (ex != null) {
       ex.printStackTrace();
-      log.info("[afterCompletion][{}][{}{}][exception: {}]", request.getMethod(),
-          request.getMethod(), request.getRequestURI(), ex);
+      log.info(
+          "[afterCompletion][{}][{}{}][exception: {}]",
+          request.getMethod(),
+          request.getMethod(),
+          request.getRequestURI(),
+          ex
+      );
     }
   }
 
@@ -51,10 +53,12 @@ public class WebLogInterceptor implements HandlerInterceptor {
     if (e != null) {
       posted.append("?");
     }
+
     while (e.hasMoreElements()) {
       if (posted.length() > 1) {
         posted.append("&");
       }
+
       String curr = (String) e.nextElement();
       posted.append(curr + "=");
       if (curr.contains("password")
@@ -65,10 +69,11 @@ public class WebLogInterceptor implements HandlerInterceptor {
         posted.append(request.getParameter(curr));
       }
     }
+
     String ip = request.getHeader("X-FORWARDED-FOR");
     String ipAddr = (ip == null) ? getRemoteAddr(request) : ip;
     if (ipAddr != null && !ipAddr.equals("")) {
-      posted.append("&_psip=" + ipAddr);
+      posted.append("&_clientIp=" + ipAddr);
     }
     return posted.toString();
   }

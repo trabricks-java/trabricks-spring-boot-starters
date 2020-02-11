@@ -15,8 +15,11 @@ import io.trabricks.boot.web.views.excel.components.ExcelReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +42,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@ConditionalOnClass(RestTemplate.class)
+@AutoConfigureAfter(RestTemplateAutoConfiguration.class)
 @EnableConfigurationProperties({StorageProperties.class, FirebaseProperties.class})
 public class WebAutoConfiguration implements WebMvcConfigurer {
 
@@ -46,7 +51,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   private final ObjectMapper objectMapper;
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
-  private final RestTemplate restTemplate;
+  private final RestTemplateBuilder restTemplateBuilder;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -134,13 +139,13 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = "firebase", name = {"private-key-path", "database-url"})
   public FirebaseMessageService firebaseMessageService() {
-    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate, objectMapper);
+    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate(), objectMapper);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  public RestTemplate restTemplate(RestTemplateBuilder builder) {
-    return builder.build();
+  public RestTemplate restTemplate() {
+    return restTemplateBuilder.build();
   }
 
   @Bean
