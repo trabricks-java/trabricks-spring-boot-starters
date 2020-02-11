@@ -25,7 +25,6 @@ public class FirebaseProperties {
   private String messagingScope;
   private List<String> scopes;
   private String messageKey;
-  private String host;
 
   @NotEmpty
   private String privateKeyPath;
