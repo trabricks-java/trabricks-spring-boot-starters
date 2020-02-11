@@ -21,27 +21,28 @@ import org.springframework.http.HttpStatus;
 @ToString
 public class ErrorResponse {
 
-    private HttpStatus status;
+  private HttpStatus status;
 
-    private String code;
+  private String code;
 
-    private String message;
+  private String message;
 
-    @Builder.Default
-    private LocalDateTime timestamp = LocalDateTime.now();
+  @Builder.Default
+  private LocalDateTime timestamp = LocalDateTime.now();
 
-    private List<FieldError> fieldError;
+  private List<FieldError> fieldError;
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class FieldError {
-        private String objectName;
-        private String field;
-        private Object rejectedValue;
-        private String defaultMessage;
-    }
+  @Getter
+  @Setter
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Builder
+  public static class FieldError {
+
+    private String objectName;
+    private String field;
+    private Object rejectedValue;
+    private String defaultMessage;
+  }
 
 }
