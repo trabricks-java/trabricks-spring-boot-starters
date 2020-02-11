@@ -3,6 +3,7 @@ package io.trabricks.boot.security.configs;
 import io.trabricks.boot.security.properties.WebSecurityProperties;
 import io.trabricks.boot.security.properties.WebSecurityProperties.Oauth;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "trabricks.security", name = "oauth.enabled", havingValue = "true")
+@ConditionalOnBean(AuthenticationManager.class)
 @EnableAuthorizationServer
 @EnableConfigurationProperties(WebSecurityProperties.class)
 public class AuthorizationServerAutoConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -48,8 +50,9 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
 
   @Override
   public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-    security.tokenKeyAccess("permitAll()")
-        .checkTokenAccess("isAuthenticated()")
+    security
+        .tokenKeyAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
+        .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
         .allowFormAuthenticationForClients();
   }
 
@@ -59,6 +62,7 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
     clients.inMemory()
         .withClient(oauthProperties.getClientId())
         .authorizedGrantTypes("password", "refresh_token", "client_credentials")
+        .authorities("ROLE_TRUSTED_CLIENT")
         .scopes("read", "write")
         .secret(this.passwordEncoder.encode(oauthProperties.getClientSecret()))
         .accessTokenValiditySeconds(oauthProperties.getTokenValidityDays() * 24 * 60 * 60)
