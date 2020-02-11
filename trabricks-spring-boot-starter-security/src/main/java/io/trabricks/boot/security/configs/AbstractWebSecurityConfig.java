@@ -67,43 +67,49 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
   @Override
   public void configure(WebSecurity web) {
     web
-        .ignoring()
-        .mvcMatchers(
-            "/docs/index.html",
-            "/vendors/**",
-            "/swagger-ui.html",
-            "/swagger-resources/**",
-            "/v2/api-docs",
-            "/fonts/**"
-        )
-        .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+      .ignoring()
+      .mvcMatchers(
+          "/docs/index.html",
+          "/vendors/**",
+          "/swagger-ui.html",
+          "/swagger-resources/**",
+          "/v2/api-docs",
+          "/fonts/**"
+      )
+      .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .formLogin()
-        .loginPage("/login")
-        .permitAll()
-        .and()
-        .logout()
-        .logoutUrl("/logout")
-        .and()
-        .csrf()
-        .requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher())
-    ;
+      .formLogin()
+      .loginPage("/login")
+      .permitAll()
+      .and()
+      .logout()
+      .logoutUrl("/logout")
+      .and()
+      .csrf()
+      .requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher());
+
+    if (webSecurityProperties.getOauth().isEnabled()) {
+      http
+          .authorizeRequests()
+          .antMatchers("/oauth/**", "/oauth2/callback").permitAll()
+          .antMatchers("/error").permitAll();
+    }
 
     if (webSecurityProperties.getRest().isEnabled()) {
       http
-          .exceptionHandling()
-          .authenticationEntryPoint(restAuthenticationEntryPoint)
-          .and()
-          .formLogin()
-          .successHandler(restAuthenticationSuccessHandler)
-          .failureHandler(restAuthenticationFailureHandler)
-          .and()
-          .logout()
-          .logoutSuccessHandler(restLogoutSuccessHandler);
+        .exceptionHandling()
+        .authenticationEntryPoint(restAuthenticationEntryPoint)
+        .and()
+        .formLogin()
+        .successHandler(restAuthenticationSuccessHandler)
+        .failureHandler(restAuthenticationFailureHandler)
+        .and()
+        .logout()
+        .logoutSuccessHandler(restLogoutSuccessHandler);
     }
   }
 
