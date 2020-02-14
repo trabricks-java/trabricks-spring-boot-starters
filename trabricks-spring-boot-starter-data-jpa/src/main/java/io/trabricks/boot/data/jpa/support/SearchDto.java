@@ -3,9 +3,12 @@ package io.trabricks.boot.data.jpa.support;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.ObjectUtils;
@@ -15,6 +18,9 @@ import org.springframework.util.ObjectUtils;
  * @since 2019-07-23
  */
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @ToString
 public abstract class SearchDto<T> {
 
