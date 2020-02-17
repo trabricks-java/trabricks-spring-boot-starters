@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -64,6 +65,12 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
       final WebRequest request) {
     log.info("request.getUserPrincipal(): {}", request.getUserPrincipal());
     return errorResponseEntity(HttpStatus.FORBIDDEN, ex);
+  }
+
+  @ExceptionHandler({AuthenticationException.class})
+  protected ResponseEntity<Object> handleAuthenticationException(final Exception ex,
+      final WebRequest request) {
+    return errorResponseEntity(HttpStatus.UNAUTHORIZED, ex);
   }
 
   @ExceptionHandler({IllegalArgumentException.class})
