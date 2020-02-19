@@ -24,7 +24,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
  * @author eomjeongjae
  * @since 2019/10/31
  */
+@EnableAsync
 @Slf4j
 @RequiredArgsConstructor
 @EnableConfigurationProperties(FirebaseProperties.class)
@@ -66,6 +67,17 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
   }
 
   @Override
+  public void sendMessage(Message message) {
+    try {
+      // Response is a message ID string
+      String response = FirebaseMessaging.getInstance().send(message);
+      log.info("response: {}", response);
+    } catch (FirebaseMessagingException e) {
+      log.error("Firebase send message error", e);
+    }
+  }
+
+  @Override
   public void sendMessage(List<Message> messages) {
     try {
       // Response is a message ID string
@@ -85,17 +97,6 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
   }
 
   @Override
-  public void sendMessage(Message message) {
-    try {
-      // Response is a message ID string
-      String response = FirebaseMessaging.getInstance().send(message);
-      log.info("response: {}", response);
-    } catch (FirebaseMessagingException e) {
-      log.error("Firebase send message error", e);
-    }
-  }
-
-  @Override
   public void sendMessage(FirebaseMessage firebaseMessage) {
     Map<String, Object> cloudMessage = buildNotificationMessage(firebaseMessage);
     try {
@@ -106,7 +107,6 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
     sendMessage(cloudMessage);
   }
 
-  @Async
   @Override
   public void sendMessage(Map<String, Object> firebaseMessage) {
     try {

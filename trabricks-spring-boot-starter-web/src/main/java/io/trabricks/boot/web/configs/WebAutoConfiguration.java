@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
  */
 @Slf4j
 @RequiredArgsConstructor
+@EnableAsync
 @Configuration
 @ConditionalOnClass(RestTemplate.class)
 @AutoConfigureAfter(RestTemplateAutoConfiguration.class)
