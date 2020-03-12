@@ -19,6 +19,10 @@ subprojects {
         mavenCentral()
 
         maven {
+            url = 'https://maven.pkg.github.com/trabricks-java'
+        }
+
+        maven {
             url = 'https://mvn.trabricks.io/content/repositories/m2/'
         }
     }
