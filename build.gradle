@@ -66,11 +66,12 @@ subprojects {
         }
         repositories {
             maven {
-                url = 'https://mvn.trabricks.io/content/repositories/m2/'
-                credentials {
-                    username getProperty('nexusUser')
-                    password getProperty('nexusPassword')
-                }
+                url = "file:../releases"
+//                url = 'file:./releases' //https://mvn.trabricks.io/content/repositories/m2/'
+//                credentials {
+//                    username getProperty('nexusUser')
+//                    password getProperty('nexusPassword')
+//                }
             }
         }
     }
