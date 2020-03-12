@@ -3,10 +3,11 @@
   <groupId>io.trabricks.boot</groupId>
   <artifactId>trabricks-spring-boot-starter-web</artifactId>
   <versioning>
-    <release>1.0.10</release>
+    <release>1.0.11</release>
     <versions>
       <version>1.0.10</version>
+      <version>1.0.11</version>
     </versions>
-    <lastUpdated>20200312051836</lastUpdated>
+    <lastUpdated>20200312052532</lastUpdated>
   </versioning>
 </metadata>

@@ -1,7 +1,6 @@
 package io.trabricks.boot.web.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hectorlopezfernandez.pebble.springsecurity.SpringSecurityExtension;
 import io.trabricks.boot.web.common.CommonRestControllerAdvice;
 import io.trabricks.boot.web.interceptors.WebLogInterceptor;
 import io.trabricks.boot.web.notice.properties.FirebaseProperties;
@@ -122,12 +121,6 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   @ConditionalOnMissingBean
   public PebbleViewExtension pebbleViewExtension() {
     return new PebbleViewExtension(messageSourceAccessor(), objectMapper);
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  public SpringSecurityExtension securityExtension() {
-    return new SpringSecurityExtension();
   }
 
   @Bean
