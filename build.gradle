@@ -68,7 +68,7 @@ subprojects {
                 url = uri("https://maven.pkg.github.com/trabricks-java/trabricks-spring-boot-starters")
                 credentials {
                     username = 'suhanmoon'
-                    password = 'bc5c3fb1b2979d7c654125c6f1af268e2d1008b5'
+                    password = '92eb5ecc308dc639117c39ab70162ba5d49f503e'
                 }
             }
         }
