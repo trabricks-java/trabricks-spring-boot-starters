@@ -62,6 +62,25 @@ subprojects {
     }
 
     publishing {
+        repositories {
+            maven {
+                url = uri("https://maven.pkg.github.com/trabricks-java/trabricks-spring-boot-starters")
+                credentials {
+                    //username = getProperty("gpr.user") ?: System.getenv("USERNAME")
+                    //password = getProperty("gpr.key") ?: System.getenv("TOKEN")
+                    username = 'jeongjaeeom'
+                    password = 'fa47fa398d6028d7f8da4e9be74e1fd3d2bc286f'
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
+
+    /*publishing {
         publications {
             mavenJava(MavenPublication) {
                 from(components.java)
@@ -77,5 +96,5 @@ subprojects {
 //                }
             }
         }
-    }
+    }*/
 }
