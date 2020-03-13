@@ -14,6 +14,9 @@ buildscript {
 group 'com.trabricks.boot'
 version '1.0.0'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 subprojects {
     repositories {
         mavenCentral()
@@ -67,8 +70,8 @@ subprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/trabricks-java/trabricks-spring-boot-starters")
                 credentials {
-                    username = getProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = getProperty("gpr.key") ?: System.getenv("TOKEN")
+                    username = properties.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = properties.getProperty("gpr.key") ?: System.getenv("TOKEN")
                 }
             }
         }
