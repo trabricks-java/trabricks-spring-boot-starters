@@ -11,15 +11,12 @@ import io.trabricks.boot.web.storage.properties.StorageProperties;
 import io.trabricks.boot.web.storage.service.FileSystemStorageService;
 import io.trabricks.boot.web.storage.service.StorageService;
 import io.trabricks.boot.web.views.excel.components.ExcelReader;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -27,10 +24,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -46,7 +41,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @EnableAsync
 @Configuration
 @ConditionalOnClass(RestTemplate.class)
-@AutoConfigureAfter(RestTemplateAutoConfiguration.class)
 @EnableConfigurationProperties({StorageProperties.class, FirebaseProperties.class})
 public class WebAutoConfiguration implements WebMvcConfigurer {
 
@@ -55,7 +49,6 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
   private final RestTemplateBuilder restTemplateBuilder;
-  private final List<HandlerInterceptor> interceptors;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -73,10 +66,6 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
             "/static-bundle/**"
         );
     registry.addInterceptor(localeChangeInterceptor());
-
-    if (!CollectionUtils.isEmpty(interceptors)) {
-      interceptors.forEach(registry::addInterceptor);
-    }
   }
 
   @Bean
@@ -135,7 +124,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = "firebase", name = {"private-key-path", "database-url"})
   public FirebaseMessageService firebaseMessageService() {
-    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, restTemplate(), objectMapper);
+    return new DefaultFirebaseMessageServiceImpl(firebaseProperties, objectMapper);
   }
 
   @Bean
