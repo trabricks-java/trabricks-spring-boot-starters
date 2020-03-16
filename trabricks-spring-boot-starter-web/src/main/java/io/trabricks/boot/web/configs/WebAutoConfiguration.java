@@ -11,6 +11,7 @@ import io.trabricks.boot.web.storage.properties.StorageProperties;
 import io.trabricks.boot.web.storage.service.FileSystemStorageService;
 import io.trabricks.boot.web.storage.service.StorageService;
 import io.trabricks.boot.web.views.excel.components.ExcelReader;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -53,10 +55,11 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
   private final RestTemplateBuilder restTemplateBuilder;
+  private final List<HandlerInterceptor> interceptors;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(webLogInterceptor())
+    registry.addInterceptor(new WebLogInterceptor())
         .excludePathPatterns(
             "/css/**",
             "/js/**",
@@ -70,12 +73,10 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
             "/static-bundle/**"
         );
     registry.addInterceptor(localeChangeInterceptor());
-  }
 
-  @Bean
-  @ConditionalOnMissingBean
-  public HandlerInterceptor webLogInterceptor() {
-    return new WebLogInterceptor();
+    if (!CollectionUtils.isEmpty(interceptors)) {
+      interceptors.forEach(registry::addInterceptor);
+    }
   }
 
   @Bean
