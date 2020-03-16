@@ -19,6 +19,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author eomjeongjae
@@ -37,6 +38,11 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
   public void init() {
     log.info("DefaultFirebaseMessageServiceImpl init");
     try {
+      log.info("firebaseProperties: {}", firebaseProperties);
+      if (StringUtils.isEmpty(firebaseProperties.getPrivateKeyPath())) {
+        return;
+      }
+
       InputStream serviceAccount =
           new ClassPathResource(firebaseProperties.getPrivateKeyPath())
               .getInputStream();

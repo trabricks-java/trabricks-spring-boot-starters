@@ -1,7 +1,6 @@
 package io.trabricks.boot.web.notice.properties;
 
 import java.util.List;
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,11 +24,7 @@ public class FirebaseProperties {
   private String messagingScope;
   private List<String> scopes;
   private String messageKey;
-
-  @NotEmpty
   private String privateKeyPath;
-
-  @NotEmpty
   private String databaseUrl;
 
 }
