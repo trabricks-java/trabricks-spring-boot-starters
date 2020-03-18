@@ -26,11 +26,11 @@ public abstract class SearchDto<T> {
 
   @Setter
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate fromDate;
+  protected LocalDate fromDate;
 
   @Setter
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate toDate;
+  protected LocalDate toDate;
 
   public final Specification<T> toSpecification() {
     return getRestrictions().output();
