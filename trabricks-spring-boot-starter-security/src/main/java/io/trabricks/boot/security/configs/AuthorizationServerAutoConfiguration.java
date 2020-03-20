@@ -45,7 +45,8 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
         .tokenStore(tokenStore())
         .accessTokenConverter(accessTokenConverter())
         .userDetailsService(userDetailsService)
-        .authenticationManager(authenticationManager);
+        .authenticationManager(authenticationManager)
+    ;
   }
 
   @Override
