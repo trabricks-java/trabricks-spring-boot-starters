@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,10 @@ import org.springframework.util.ObjectUtils;
 public abstract class SearchDto<T> {
 
   @Setter
+  @Default
+  protected String periodType = "createdAt";
+
+  @Setter
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   protected LocalDate fromDate;
 
@@ -39,7 +44,7 @@ public abstract class SearchDto<T> {
   public final Restrictions getRestrictions() {
     final Restrictions restrictions = this.generateRestrictions();
     if (!ObjectUtils.isEmpty(this.fromDate) && !ObjectUtils.isEmpty(this.toDate)) {
-      restrictions.between("createdAt", LocalDateTime.of(this.fromDate, LocalTime.MIN),
+      restrictions.between(this.periodType, LocalDateTime.of(this.fromDate, LocalTime.MIN),
           LocalDateTime.of(this.toDate, LocalTime.MAX));
     }
     return restrictions;
