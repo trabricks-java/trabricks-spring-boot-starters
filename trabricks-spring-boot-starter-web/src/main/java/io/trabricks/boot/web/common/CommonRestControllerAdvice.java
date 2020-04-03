@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice(annotations = RestController.class)
 public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
 
+  private final MessageSourceAccessor messageSourceAccessor;
   private final ModelMapper modelMapper;
 
   @Override
@@ -44,13 +47,15 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
       HttpHeaders headers,
       HttpStatus status,
       WebRequest request) {
-    return errorResponseEntity(status, ex, "Method argument not valid", null, ex.getBindingResult());
+    return errorResponseEntity(status, ex, "Method argument not valid", null,
+        ex.getBindingResult());
   }
 
   @Override
   protected ResponseEntity<Object> handleBindException(
       BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    return errorResponseEntity(status, ex, "Method argument binding error", null, ex.getBindingResult());
+    return errorResponseEntity(status, ex, "Method argument binding error", null,
+        ex.getBindingResult());
   }
 
   @Override
@@ -81,6 +86,23 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
   @ExceptionHandler(HttpStatusException.class)
   protected ResponseEntity<Object> handleHttpStatusException(HttpStatusException ex) {
     return errorResponseEntity(ex.getStatus(), ex, ex.getCode());
+  }
+
+  @ExceptionHandler(HttpStatusMessageException.class)
+  protected ResponseEntity<Object> handleHttpStatusMessageException(HttpStatusMessageException ex) {
+    String code = ex.getCode();
+
+    String responseMsg = null;
+    if (!StringUtils.isEmpty(code)) {
+      try {
+        responseMsg = messageSourceAccessor.getMessage(code, ex.getArgs());
+      } catch (Exception e) {
+        // nothing
+        log.error("No such message", ex);
+      }
+    }
+
+    return errorResponseEntity(ex.getStatus(), ex, responseMsg, ex.getCode(), null);
   }
 
   @ExceptionHandler(Exception.class)

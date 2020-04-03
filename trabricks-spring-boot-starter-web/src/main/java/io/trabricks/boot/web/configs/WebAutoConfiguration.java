@@ -19,10 +19,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestTemplate;
@@ -49,6 +49,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
   private final StorageProperties storageProperties;
   private final FirebaseProperties firebaseProperties;
   private final RestTemplateBuilder restTemplateBuilder;
+  private final MessageSource messageSource;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -86,25 +87,27 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     return localeResolver;
   }
 
-  @Bean
+ @Bean
   @ConditionalOnMissingBean
   public MessageSourceAccessor messageSourceAccessor() {
-    return new MessageSourceAccessor(messageSource());
+    return new MessageSourceAccessor(messageSource);
   }
 
+  /*
+  // spring boot autoconfig 활용
   @Bean
   @ConditionalOnMissingBean
   public ReloadableResourceBundleMessageSource messageSource() {
     ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-    messageSource.setBasename("classpath:/i18n/messages");
+    messageSource.setBasename("classpath*:/i18n/messages");
     messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
-  }
+  }*/
 
   @Bean
   @ConditionalOnMissingBean(annotation = RestControllerAdvice.class)
   public CommonRestControllerAdvice commonRestControllerAdvice() {
-    return new CommonRestControllerAdvice(modelMapper);
+    return new CommonRestControllerAdvice(messageSourceAccessor(), modelMapper);
   }
 
   @Bean

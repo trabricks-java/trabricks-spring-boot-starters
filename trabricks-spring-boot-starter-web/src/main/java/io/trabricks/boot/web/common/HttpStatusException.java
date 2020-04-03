@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @since 2019-08-12
  */
 @Getter
-public class HttpStatusException extends RuntimeException{
+public class HttpStatusException extends RuntimeException {
 
   private final HttpStatus status;
   private final String code;
@@ -28,4 +28,5 @@ public class HttpStatusException extends RuntimeException{
     this.status = status;
     this.code = code;
   }
+
 }
