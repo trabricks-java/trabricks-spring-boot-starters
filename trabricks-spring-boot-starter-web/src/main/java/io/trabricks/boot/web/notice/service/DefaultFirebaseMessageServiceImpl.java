@@ -83,7 +83,7 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
           .forEach(sendResponse -> {
             log.info("messageId: {}", sendResponse.getMessageId());
             log.info("isSuccessful: {}", sendResponse.isSuccessful());
-            log.info("exception: {}", sendResponse.getException());
+            log.error("exception", sendResponse.getException());
           });
     } catch (FirebaseMessagingException e) {
       log.error("Firebase send message error", e);
