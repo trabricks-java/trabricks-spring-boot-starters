@@ -10,8 +10,11 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 /**
+ * The type Auditable entity.
+ *
+ * @param <T> the type parameter
  * @author eomjeongjae
- * @since 2019-02-01
+ * @since 2019 -02-01
  */
 @Getter
 @NoArgsConstructor

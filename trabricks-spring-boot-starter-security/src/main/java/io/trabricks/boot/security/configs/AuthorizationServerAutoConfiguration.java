@@ -23,8 +23,10 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 /**
+ * The type Authorization server auto configuration.
+ *
  * @author eomjeongjae
- * @since 29/09/2019
+ * @since 29 /09/2019
  */
 @Configuration
 @RequiredArgsConstructor
@@ -71,11 +73,21 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
     ;
   }
 
+  /**
+   * Token store token store.
+   *
+   * @return the token store
+   */
   @Bean
   public TokenStore tokenStore() {
     return new JwtTokenStore(accessTokenConverter());
   }
 
+  /**
+   * Access token converter jwt access token converter.
+   *
+   * @return the jwt access token converter
+   */
   @Bean
   public JwtAccessTokenConverter accessTokenConverter() {
     JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -83,6 +95,11 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
     return converter;
   }
 
+  /**
+   * Token services default token services.
+   *
+   * @return the default token services
+   */
   @Bean
   @Primary
   public DefaultTokenServices tokenServices() {

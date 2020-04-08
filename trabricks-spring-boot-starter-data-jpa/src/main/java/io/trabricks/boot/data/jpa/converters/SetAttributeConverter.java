@@ -5,8 +5,10 @@ import javax.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * The type Set attribute converter.
+ *
  * @author eomjeongjae
- * @since 2019-02-27
+ * @since 2019 -02-27
  */
 @Slf4j
 @Converter(autoApply = true)

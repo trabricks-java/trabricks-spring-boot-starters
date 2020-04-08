@@ -10,6 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * The type Auditable unique entity.
+ *
+ * @param <T> the type parameter
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

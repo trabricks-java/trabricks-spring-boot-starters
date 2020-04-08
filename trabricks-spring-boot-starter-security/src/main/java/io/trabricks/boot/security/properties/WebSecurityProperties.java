@@ -6,8 +6,10 @@ import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
+ * The type Web security properties.
+ *
  * @author eomjeongjae
- * @since 25/09/2019
+ * @since 25 /09/2019
  */
 @ConfigurationProperties(prefix = "trabricks.security")
 @Getter
@@ -18,6 +20,9 @@ public class WebSecurityProperties {
   private Rest rest = new Rest();
   private Oauth oauth = new Oauth();
 
+  /**
+   * The type Rest.
+   */
   @Getter
   @Setter
   @ToString
@@ -27,6 +32,9 @@ public class WebSecurityProperties {
 
   }
 
+  /**
+   * The type Oauth.
+   */
   @Getter
   @Setter
   @ToString

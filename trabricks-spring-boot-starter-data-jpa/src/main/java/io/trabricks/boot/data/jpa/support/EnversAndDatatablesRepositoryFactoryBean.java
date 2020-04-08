@@ -16,11 +16,24 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.history.support.RevisionEntityInformation;
 
+/**
+ * The type Envers and datatables repository factory bean.
+ *
+ * @param <T>  the type parameter
+ * @param <S>  the type parameter
+ * @param <ID> the type parameter
+ * @param <N>  the type parameter
+ */
 public class EnversAndDatatablesRepositoryFactoryBean<T extends RevisionRepository<S, ID, N>, S, ID extends Serializable, N extends Number & Comparable<N>> extends
     EnversRevisionRepositoryFactoryBean<T, S, ID, N> {
 
   private Class<?> revisionEntityClass;
 
+  /**
+   * Instantiates a new Envers and datatables repository factory bean.
+   *
+   * @param repositoryInterface the repository interface
+   */
   public EnversAndDatatablesRepositoryFactoryBean(Class repositoryInterface) {
     super(repositoryInterface);
   }
@@ -41,6 +54,12 @@ public class EnversAndDatatablesRepositoryFactoryBean<T extends RevisionReposito
     private final RevisionEntityInformation revisionEntityInformation;
     private final EntityManager entityManager;
 
+    /**
+     * Instantiates a new Custom data tables repository factory.
+     *
+     * @param entityManager       the entity manager
+     * @param revisionEntityClass the revision entity class
+     */
     public CustomDataTablesRepositoryFactory(EntityManager entityManager,
         Class<?> revisionEntityClass) {
       super(entityManager);

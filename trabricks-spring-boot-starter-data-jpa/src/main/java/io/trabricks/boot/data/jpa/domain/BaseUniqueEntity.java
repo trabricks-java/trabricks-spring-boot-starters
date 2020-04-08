@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * The type Base unique entity.
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

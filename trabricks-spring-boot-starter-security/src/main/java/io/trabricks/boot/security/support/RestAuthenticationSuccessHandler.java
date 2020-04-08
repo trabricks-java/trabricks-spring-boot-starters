@@ -12,8 +12,10 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
 /**
+ * The type Rest authentication success handler.
+ *
  * @author eomjeongjae
- * @since 2019-07-19
+ * @since 2019 -07-19
  */
 public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 

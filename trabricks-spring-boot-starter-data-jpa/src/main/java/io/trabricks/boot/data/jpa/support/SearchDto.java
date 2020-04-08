@@ -15,8 +15,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * The type Search dto.
+ *
+ * @param <T> the type parameter
  * @author eomjeongjae
- * @since 2019-07-23
+ * @since 2019 -07-23
  */
 @Getter
 @NoArgsConstructor
@@ -25,22 +28,41 @@ import org.springframework.util.ObjectUtils;
 @ToString
 public abstract class SearchDto<T> {
 
+  /**
+   * The Period type.
+   */
   @Setter
   @Default
   protected String periodType = "createdAt";
 
+  /**
+   * The From date.
+   */
   @Setter
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   protected LocalDate fromDate;
 
+  /**
+   * The To date.
+   */
   @Setter
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   protected LocalDate toDate;
 
+  /**
+   * To specification specification.
+   *
+   * @return the specification
+   */
   public final Specification<T> toSpecification() {
     return getRestrictions().output();
   }
 
+  /**
+   * Gets restrictions.
+   *
+   * @return the restrictions
+   */
   public final Restrictions getRestrictions() {
     final Restrictions restrictions = this.generateRestrictions();
     if (!ObjectUtils.isEmpty(this.fromDate) && !ObjectUtils.isEmpty(this.toDate)) {
@@ -50,6 +72,11 @@ public abstract class SearchDto<T> {
     return restrictions;
   }
 
+  /**
+   * Generate restrictions restrictions.
+   *
+   * @return the restrictions
+   */
   protected abstract Restrictions generateRestrictions();
 
 }

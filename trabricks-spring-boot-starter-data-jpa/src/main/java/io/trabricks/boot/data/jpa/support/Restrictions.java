@@ -19,112 +19,250 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 
+/**
+ * The type Restrictions.
+ */
 public class Restrictions {
 
   private List<Condition> conditions = Lists.newArrayList();
   private List<Restrictions> children = Lists.newArrayList();
   private Conn currCon;
 
+  /**
+   * Instantiates a new Restrictions.
+   */
   public Restrictions() {
     this.currCon = Conn.AND;
   }
 
+  /**
+   * Instantiates a new Restrictions.
+   *
+   * @param conn the conn
+   */
   public Restrictions(Conn conn) {
     this.currCon = conn;
   }
 
+  /**
+   * Clear.
+   */
   public void clear() {
     this.conditions.clear();
   }
 
+  /**
+   * Add child.
+   *
+   * @param child the child
+   */
   public void addChild(Restrictions child) {
     this.children.add(child);
   }
 
+  /**
+   * Eq restrictions.
+   *
+   * @param name  the name
+   * @param value the value
+   * @return the restrictions
+   */
   public Restrictions eq(String name, Object value) {
     conditions.add(new Condition(ConditionType.EQUALS, name, value));
     return this;
   }
 
+  /**
+   * Le restrictions.
+   *
+   * @param name  the name
+   * @param value the value
+   * @return the restrictions
+   */
   public Restrictions le(String name, Object value) {
     conditions.add(new Condition(ConditionType.LESS_THAN_OR_EQUAL_TO, name, value));
     return this;
   }
 
+  /**
+   * Ge restrictions.
+   *
+   * @param name  the name
+   * @param value the value
+   * @return the restrictions
+   */
   public Restrictions ge(String name, Object value) {
     conditions.add(new Condition(ConditionType.GREATER_THAN_OR_EQUAL_TO, name, value));
     return this;
   }
 
+  /**
+   * Is null restrictions.
+   *
+   * @param key the key
+   * @return the restrictions
+   */
   public Restrictions isNull(String key) {
     conditions.add(new Condition(ConditionType.IS_NULL, key));
     return this;
   }
 
+  /**
+   * Is not null restrictions.
+   *
+   * @param key the key
+   * @return the restrictions
+   */
   public Restrictions isNotNull(String key) {
     conditions.add(new Condition(ConditionType.IS_NOT_NULL, key));
     return this;
   }
 
+  /**
+   * Ne restrictions.
+   *
+   * @param key    the key
+   * @param object the object
+   * @return the restrictions
+   */
   public Restrictions ne(String key, Object object) {
     conditions.add(new Condition(ConditionType.NOT_EQUAL, key, object));
     return this;
   }
 
+  /**
+   * Like restrictions.
+   *
+   * @param key    the key
+   * @param object the object
+   * @return the restrictions
+   */
   public Restrictions like(String key, String object) {
     conditions.add(new Condition(ConditionType.LIKE, key, object));
     return this;
   }
 
+  /**
+   * Between restrictions.
+   *
+   * @param key   the key
+   * @param start the start
+   * @param end   the end
+   * @return the restrictions
+   */
   public Restrictions between(String key, Object start, Object end) {
     conditions.add(new Condition(ConditionType.BETWEEN, key, start, end));
     return this;
   }
 
+  /**
+   * Near restrictions.
+   *
+   * @param lat the lat
+   * @param lng the lng
+   * @return the restrictions
+   */
   public Restrictions near(Double lat, Double lng) {
     conditions.add(new Condition(ConditionType.ORDER_NEAR, "distance", lat, lng));
     return this;
   }
 
+  /**
+   * Add order restrictions.
+   *
+   * @param name the name
+   * @param sort the sort
+   * @return the restrictions
+   */
   public Restrictions addOrder(String name, Sort.Direction sort) {
     conditions.add(new Condition(ConditionType.ORDER, name, sort));
     return this;
   }
 
 
+  /**
+   * In near restrictions.
+   *
+   * @param lat      the lat
+   * @param lng      the lng
+   * @param distance the distance
+   * @return the restrictions
+   */
   public Restrictions inNear(Double lat, Double lng, Double distance) {
     conditions.add(new Condition(ConditionType.IN_NEAR, distance, lat, lng));
     return this;
   }
 
+  /**
+   * In.
+   *
+   * @param name  the name
+   * @param value the value
+   */
   @SuppressWarnings("rawtypes")
   public void in(String name, Collection value) {
     conditions.add(new Condition(ConditionType.IN, name, value));
   }
 
+  /**
+   * Str in.
+   *
+   * @param name  the name
+   * @param value the value
+   */
   @SuppressWarnings("rawtypes")
   public void strIn(String name, Collection value) {
     conditions.add(new Condition(ConditionType.STR_IN, name, value));
   }
 
+  /**
+   * Not in.
+   *
+   * @param name  the name
+   * @param value the value
+   */
   @SuppressWarnings("rawtypes")
   public void notIn(String name, Collection value) {
     conditions.add(new Condition(ConditionType.NOT_IN, name, value));
   }
 
+  /**
+   * Is null or le.
+   *
+   * @param key   the key
+   * @param value the value
+   */
   public void isNullOrLe(String key, Object value) {
     conditions.add(new Condition(ConditionType.LESS_THAN_OR_IS_NULL, key, value));
   }
 
+  /**
+   * Is null or ge.
+   *
+   * @param key   the key
+   * @param value the value
+   */
   public void isNullOrGe(String key, Object value) {
     conditions.add(new Condition(ConditionType.GREATER_THAN_OR_IS_NULL, key, value));
   }
 
 
+  /**
+   * Eq property.
+   *
+   * @param key  the key
+   * @param key2 the key 2
+   */
   public void eqProperty(String key, String key2) {
     conditions.add(new Condition(ConditionType.EQUAL_PROPERTY, key, key2));
   }
 
+  /**
+   * Output specification.
+   *
+   * @param <T> the type parameter
+   * @return the specification
+   */
   @SuppressWarnings("serial")
   public <T> Specification<T> output() {
     Specification<T> spec = (Specification<T>) (root, query, cb) -> {
@@ -353,16 +491,37 @@ public class Restrictions {
     private Object value1;
     private Object value2;
 
+    /**
+     * Instantiates a new Condition.
+     *
+     * @param type the type
+     * @param name the name
+     */
     public Condition(ConditionType type, Object name) {
       this(type, name, null);
     }
 
+    /**
+     * Instantiates a new Condition.
+     *
+     * @param type   the type
+     * @param name   the name
+     * @param value1 the value 1
+     */
     public Condition(ConditionType type, Object name, Object value1) {
       this.type = type;
       this.name = name;
       this.value1 = value1;
     }
 
+    /**
+     * Instantiates a new Condition.
+     *
+     * @param type   the type
+     * @param name   the name
+     * @param value1 the value 1
+     * @param value2 the value 2
+     */
     public Condition(ConditionType type, Object name, Object value1, Object value2) {
       this.type = type;
       this.name = name;
@@ -373,27 +532,87 @@ public class Restrictions {
   }
 
   private enum ConditionType {
+    /**
+     * Equals condition type.
+     */
     EQUALS,
+    /**
+     * In condition type.
+     */
     IN,
+    /**
+     * Not in condition type.
+     */
     NOT_IN,
+    /**
+     * Less than or equal to condition type.
+     */
     LESS_THAN_OR_EQUAL_TO,
+    /**
+     * Greater than or equal to condition type.
+     */
     GREATER_THAN_OR_EQUAL_TO,
+    /**
+     * Is null condition type.
+     */
     IS_NULL,
+    /**
+     * Is not null condition type.
+     */
     IS_NOT_NULL,
+    /**
+     * Not equal condition type.
+     */
     NOT_EQUAL,
+    /**
+     * Like condition type.
+     */
     LIKE,
+    /**
+     * Between condition type.
+     */
     BETWEEN,
+    /**
+     * Less than or is null condition type.
+     */
     LESS_THAN_OR_IS_NULL,
+    /**
+     * Greater than or is null condition type.
+     */
     GREATER_THAN_OR_IS_NULL,
+    /**
+     * Equal property condition type.
+     */
     EQUAL_PROPERTY,
+    /**
+     * Order condition type.
+     */
     ORDER,
+    /**
+     * Order near condition type.
+     */
     ORDER_NEAR,
+    /**
+     * In near condition type.
+     */
     IN_NEAR,
+    /**
+     * Str in condition type.
+     */
     STR_IN,
   }
 
+  /**
+   * The enum Conn.
+   */
   public enum Conn {
+    /**
+     * And conn.
+     */
     AND,
+    /**
+     * Or conn.
+     */
     OR
   }
 

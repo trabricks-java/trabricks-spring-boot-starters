@@ -7,8 +7,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 /**
+ * The type Rest authentication failure handler.
+ *
  * @author eomjeongjae
- * @since 2019-07-19
+ * @since 2019 -07-19
  */
 public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
 

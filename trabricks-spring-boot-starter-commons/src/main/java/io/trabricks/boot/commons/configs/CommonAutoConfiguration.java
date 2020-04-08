@@ -9,13 +9,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * The type Common auto configuration.
+ *
  * @author eomjeongjae
- * @since 2019-09-23
+ * @since 2019 -09-23
  */
 @Configuration
 @ConditionalOnClass(ModelMapper.class)
 public class CommonAutoConfiguration {
 
+  /**
+   * Model mapper model mapper.
+   *
+   * @return the model mapper
+   */
   @Bean
   @ConditionalOnMissingBean
   public ModelMapper modelMapper() {

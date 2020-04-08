@@ -13,18 +13,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 /**
+ * The type Security auditor aware auto configuration.
+ *
  * @author eomjeongjae
- * @since 2019-07-18
+ * @since 2019 -07-18
  */
 @Configuration
 public class SecurityAuditorAwareAutoConfiguration {
 
+  /**
+   * Auditor provider auditor aware.
+   *
+   * @return the auditor aware
+   */
   @Bean
   @ConditionalOnMissingBean
   public AuditorAware<String> auditorProvider() {
     return new SecurityAuditorAware();
   }
 
+  /**
+   * The type Security auditor aware.
+   */
   public static class SecurityAuditorAware implements AuditorAware<String> {
 
     @Override

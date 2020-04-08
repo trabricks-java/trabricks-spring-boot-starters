@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
+ * The type Data jpa auto configuration.
+ *
  * @author eomjeongjae
- * @since 2019-09-20
+ * @since 2019 -09-20
  */
 @RequiredArgsConstructor
 @EnableJpaAuditing
@@ -19,6 +21,11 @@ public class DataJpaAutoConfiguration {
 
   private final ModelMapper modelMapper;
 
+  /**
+   * Data tables service data tables service.
+   *
+   * @return the data tables service
+   */
   @Bean
   @ConditionalOnMissingBean
   public DataTablesService dataTablesService() {

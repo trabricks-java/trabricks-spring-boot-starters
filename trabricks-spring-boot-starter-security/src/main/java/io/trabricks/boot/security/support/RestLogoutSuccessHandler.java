@@ -6,8 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
 /**
+ * The type Rest logout success handler.
+ *
  * @author eomjeongjae
- * @since 2019-07-19
+ * @since 2019 -07-19
  */
 public class RestLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 

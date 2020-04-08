@@ -3,6 +3,9 @@ package io.trabricks.boot.data.jpa.support;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.springframework.data.repository.history.support.RevisionEntityInformation;
 
+/**
+ * The type Default revision entity information.
+ */
 public class DefaultRevisionEntityInformation implements RevisionEntityInformation {
 
   /*

@@ -23,8 +23,10 @@ import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
+ * The type Abstract web security config.
+ *
  * @author eomjeongjae
- * @since 2019-09-24
+ * @since 2019 -09-24
  */
 @EnableConfigurationProperties(WebSecurityProperties.class)
 public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -113,15 +115,26 @@ public abstract class AbstractWebSecurityConfig extends WebSecurityConfigurerAda
     }
   }
 
+  /**
+   * The type Csrf security request matcher.
+   */
   protected class CsrfSecurityRequestMatcher implements RequestMatcher {
 
     private Pattern allowedMethods;
     private RegexRequestMatcher unprotectedMatcher;
 
+    /**
+     * Instantiates a new Csrf security request matcher.
+     */
     public CsrfSecurityRequestMatcher() {
       this(".*(/files|/lambda|/dataTables.json).*");
     }
 
+    /**
+     * Instantiates a new Csrf security request matcher.
+     *
+     * @param unprotectedPattern the unprotected pattern
+     */
     public CsrfSecurityRequestMatcher(String unprotectedPattern) {
       this.allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
       this.unprotectedMatcher = new RegexRequestMatcher(unprotectedPattern, null);
