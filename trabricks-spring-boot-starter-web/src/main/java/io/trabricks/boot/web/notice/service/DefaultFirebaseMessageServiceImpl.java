@@ -12,6 +12,7 @@ import io.trabricks.boot.web.notice.properties.FirebaseProperties;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,20 +62,21 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
   }
 
   @Override
-  public void sendMessage(Message message) {
+  public CompletableFuture<String> sendMessage(Message message) {
     try {
       // Response is a message ID string
       String response = FirebaseMessaging.getInstance().send(message);
       log.info("response: {}", response);
+      return CompletableFuture.completedFuture(response);
     } catch (FirebaseMessagingException e) {
       log.error("Firebase send message error", e);
+      throw new RuntimeException(e);
     }
   }
 
   @Override
-  public void sendMessage(List<Message> messages) {
+  public CompletableFuture<BatchResponse> sendMessage(List<Message> messages) {
     try {
-      // Response is a message ID string
       BatchResponse response = FirebaseMessaging.getInstance().sendAll(messages);
       log.info("successCount: {}", response.getSuccessCount());
       log.info("failureCount: {}", response.getFailureCount());
@@ -85,8 +87,10 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
             log.info("isSuccessful: {}", sendResponse.isSuccessful());
             log.error("exception", sendResponse.getException());
           });
+      return CompletableFuture.completedFuture(response);
     } catch (FirebaseMessagingException e) {
       log.error("Firebase send message error", e);
+      throw new RuntimeException(e);
     }
   }
 

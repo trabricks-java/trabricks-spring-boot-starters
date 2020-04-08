@@ -1,7 +1,9 @@
 package io.trabricks.boot.web.notice.service;
 
+import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.Message;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -12,9 +14,9 @@ import org.springframework.scheduling.annotation.Async;
 public interface FirebaseMessageService {
 
   @Async
-  void sendMessage(List<Message> messages);
+  CompletableFuture<String> sendMessage(Message message);
 
   @Async
-  void sendMessage(Message message);
+  CompletableFuture<BatchResponse> sendMessage(List<Message> messages);
 
 }
