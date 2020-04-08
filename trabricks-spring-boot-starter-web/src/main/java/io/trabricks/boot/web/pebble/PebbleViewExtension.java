@@ -20,8 +20,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
 
 /**
+ * The type Pebble view extension.
+ *
  * @author eomjeongjae
- * @since 2019-09-23
+ * @since 2019 -09-23
  */
 @RequiredArgsConstructor
 public class PebbleViewExtension extends AbstractExtension {
@@ -199,6 +201,11 @@ public class PebbleViewExtension extends AbstractExtension {
 
     private MessageSourceAccessor messageSource;
 
+    /**
+     * Instantiates a new Function lang.
+     *
+     * @param messageSource the message source
+     */
     public FunctionLang(MessageSourceAccessor messageSource) {
       this.messageSource = messageSource;
 

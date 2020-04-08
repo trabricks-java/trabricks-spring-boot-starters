@@ -10,7 +10,13 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+/**
+ * The enum File name encoder.
+ */
 public enum FileNameEncoder {
+  /**
+   * The Ie.
+   */
   IE(Browser.IE, it -> {
     try {
       return URLEncoder.encode(it, StandardCharsets.UTF_8.name()).replaceAll("\\+", "%20");
@@ -18,9 +24,21 @@ public enum FileNameEncoder {
       return it;
     }
   }),
+  /**
+   * Firefox file name encoder.
+   */
   FIREFOX(Browser.FIREFOX, getDefaultEncodeOperator()),
+  /**
+   * Opera file name encoder.
+   */
   OPERA(Browser.OPERA, getDefaultEncodeOperator()),
+  /**
+   * Chrome file name encoder.
+   */
   CHROME(Browser.CHROME, getDefaultEncodeOperator()),
+  /**
+   * Unknown file name encoder.
+   */
   UNKNOWN(Browser.UNKNOWN, UnaryOperator.identity());
 
   private final Browser browser;
@@ -39,10 +57,20 @@ public enum FileNameEncoder {
     this.encodeOperator = encodeOperator;
   }
 
+  /**
+   * Gets browser.
+   *
+   * @return the browser
+   */
   protected Browser getBrowser() {
     return browser;
   }
 
+  /**
+   * Gets encode operator.
+   *
+   * @return the encode operator
+   */
   protected UnaryOperator<String> getEncodeOperator() {
     return encodeOperator;
   }
@@ -51,6 +79,13 @@ public enum FileNameEncoder {
     return it -> new String(it.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
   }
 
+  /**
+   * Encode string.
+   *
+   * @param browser  the browser
+   * @param fileName the file name
+   * @return the string
+   */
   public static String encode(Browser browser, String fileName) {
     return FILE_NAME_ENCODER_MAP.get(browser).apply(fileName);
   }

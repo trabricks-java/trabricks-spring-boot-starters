@@ -33,8 +33,10 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 /**
+ * The type Web auto configuration.
+ *
  * @author eomjeongjae
- * @since 2019-07-22
+ * @since 2019 -07-22
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -69,6 +71,11 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     registry.addInterceptor(localeChangeInterceptor());
   }
 
+  /**
+   * Locale change interceptor locale change interceptor.
+   *
+   * @return the locale change interceptor
+   */
   @Bean
   @ConditionalOnMissingBean
   public LocaleChangeInterceptor localeChangeInterceptor() {
@@ -77,6 +84,11 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     return localeChangeInterceptor;
   }
 
+  /**
+   * Locale resolver locale resolver.
+   *
+   * @return the locale resolver
+   */
   @Bean
   @ConditionalOnMissingBean
   public LocaleResolver localeResolver() {
@@ -87,7 +99,12 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     return localeResolver;
   }
 
- @Bean
+  /**
+   * Message source accessor message source accessor.
+   *
+   * @return the message source accessor
+   */
+  @Bean
   @ConditionalOnMissingBean
   public MessageSourceAccessor messageSourceAccessor() {
     return new MessageSourceAccessor(messageSource);
@@ -104,18 +121,33 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     return messageSource;
   }*/
 
+  /**
+   * Common rest controller advice common rest controller advice.
+   *
+   * @return the common rest controller advice
+   */
   @Bean
   @ConditionalOnMissingBean(annotation = RestControllerAdvice.class)
   public CommonRestControllerAdvice commonRestControllerAdvice() {
     return new CommonRestControllerAdvice(messageSourceAccessor(), modelMapper);
   }
 
+  /**
+   * Pebble view extension pebble view extension.
+   *
+   * @return the pebble view extension
+   */
   @Bean
   @ConditionalOnMissingBean
   public PebbleViewExtension pebbleViewExtension() {
     return new PebbleViewExtension(messageSourceAccessor(), objectMapper);
   }
 
+  /**
+   * Storage service storage service.
+   *
+   * @return the storage service
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = "storage", name = "location")
@@ -123,6 +155,11 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     return new FileSystemStorageService(storageProperties);
   }
 
+  /**
+   * Firebase message service firebase message service.
+   *
+   * @return the firebase message service
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = "firebase", name = {"private-key-path", "database-url"})
@@ -130,12 +167,22 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     return new DefaultFirebaseMessageServiceImpl(firebaseProperties, objectMapper);
   }
 
+  /**
+   * Rest template rest template.
+   *
+   * @return the rest template
+   */
   @Bean
   @ConditionalOnMissingBean
   public RestTemplate restTemplate() {
     return restTemplateBuilder.build();
   }
 
+  /**
+   * Excel reader excel reader.
+   *
+   * @return the excel reader
+   */
   @Bean
   @ConditionalOnMissingBean
   public ExcelReader excelReader() {

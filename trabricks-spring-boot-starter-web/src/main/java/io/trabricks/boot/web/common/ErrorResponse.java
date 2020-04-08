@@ -11,8 +11,10 @@ import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 /**
+ * The type Error response.
+ *
  * @author Jeongjae Eom
- * @since 2019-01-03
+ * @since 2019 -01-03
  */
 @Getter
 @Setter
@@ -32,6 +34,9 @@ public class ErrorResponse {
 
   private List<FieldError> fieldError;
 
+  /**
+   * The type Field error.
+   */
   @Getter
   @Setter
   @AllArgsConstructor

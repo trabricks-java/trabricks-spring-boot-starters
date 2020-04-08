@@ -14,8 +14,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
+ * The type Abstract controller advice.
+ *
  * @author Jeongjae Eom
- * @since 2019-01-03
+ * @since 2019 -01-03
  */
 @Slf4j
 abstract public class AbstractControllerAdvice {
@@ -23,6 +25,11 @@ abstract public class AbstractControllerAdvice {
   @Autowired
   private Environment environment;
 
+  /**
+   * Add model attribute.
+   *
+   * @param model the model
+   */
   public void addModelAttribute(ModelMap model) {
     model.addAttribute("environment", environment);
     model.addAttribute("isProduct", environment.acceptsProfiles(Profiles.of("prod")));
@@ -31,6 +38,14 @@ abstract public class AbstractControllerAdvice {
     model.addAttribute("HtmlUtils", new HtmlUtils());
   }
 
+  /**
+   * Exception string.
+   *
+   * @param request  the request
+   * @param response the response
+   * @param ex       the ex
+   * @return the string
+   */
   @ExceptionHandler(Exception.class)
   public String exception(HttpServletRequest request, HttpServletResponse response, Exception ex) {
     log.error("Exception occurred", ex);

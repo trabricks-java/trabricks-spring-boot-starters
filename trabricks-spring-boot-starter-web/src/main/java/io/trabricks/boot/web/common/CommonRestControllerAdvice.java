@@ -29,8 +29,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
+ * The type Common rest controller advice.
+ *
  * @author Jeongjae Eom
- * @since 2019-01-03
+ * @since 2019 -01-03
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -65,6 +67,13 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
     return errorResponseEntity(status, ex);
   }
 
+  /**
+   * Handle access denied exception response entity.
+   *
+   * @param ex      the ex
+   * @param request the request
+   * @return the response entity
+   */
   @ExceptionHandler({AccessDeniedException.class})
   protected ResponseEntity<Object> handleAccessDeniedException(final Exception ex,
       final WebRequest request) {
@@ -72,22 +81,47 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
     return errorResponseEntity(HttpStatus.FORBIDDEN, ex);
   }
 
+  /**
+   * Handle authentication exception response entity.
+   *
+   * @param ex      the ex
+   * @param request the request
+   * @return the response entity
+   */
   @ExceptionHandler({AuthenticationException.class})
   protected ResponseEntity<Object> handleAuthenticationException(final Exception ex,
       final WebRequest request) {
     return errorResponseEntity(HttpStatus.UNAUTHORIZED, ex);
   }
 
+  /**
+   * Handle illegal argument exception response entity.
+   *
+   * @param ex the ex
+   * @return the response entity
+   */
   @ExceptionHandler({IllegalArgumentException.class})
   protected ResponseEntity<Object> handleIllegalArgumentException(Exception ex) {
     return errorResponseEntity(HttpStatus.BAD_REQUEST, ex);
   }
 
+  /**
+   * Handle http status exception response entity.
+   *
+   * @param ex the ex
+   * @return the response entity
+   */
   @ExceptionHandler(HttpStatusException.class)
   protected ResponseEntity<Object> handleHttpStatusException(HttpStatusException ex) {
     return errorResponseEntity(ex.getStatus(), ex, ex.getCode());
   }
 
+  /**
+   * Handle http status message exception response entity.
+   *
+   * @param ex the ex
+   * @return the response entity
+   */
   @ExceptionHandler(HttpStatusMessageException.class)
   protected ResponseEntity<Object> handleHttpStatusMessageException(HttpStatusMessageException ex) {
     String code = ex.getCode();
@@ -105,6 +139,13 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
     return errorResponseEntity(ex.getStatus(), ex, responseMsg, ex.getCode(), null);
   }
 
+  /**
+   * Handle exception response entity.
+   *
+   * @param ex      the ex
+   * @param request the request
+   * @return the response entity
+   */
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<Object> handleException(Exception ex, HttpServletRequest request) {
     HttpStatus status = getStatus(request);

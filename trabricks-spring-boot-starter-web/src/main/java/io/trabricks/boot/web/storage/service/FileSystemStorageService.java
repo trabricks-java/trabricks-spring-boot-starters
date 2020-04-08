@@ -20,8 +20,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * The type File system storage service.
+ *
  * @author eomjeongjae
- * @since 2019/10/15
+ * @since 2019 /10/15
  */
 @Slf4j
 public class FileSystemStorageService implements StorageService {
@@ -29,6 +31,11 @@ public class FileSystemStorageService implements StorageService {
   private final Path rootLocation;
   private final StorageProperties storageProperties;
 
+  /**
+   * Instantiates a new File system storage service.
+   *
+   * @param properties the properties
+   */
   @Autowired
   public FileSystemStorageService(StorageProperties properties) {
     this.rootLocation = Paths.get(properties.getLocation());

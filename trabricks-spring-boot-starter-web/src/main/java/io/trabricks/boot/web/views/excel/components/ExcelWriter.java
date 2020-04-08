@@ -14,6 +14,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * The type Excel writer.
+ */
 public class ExcelWriter {
 
   private Workbook workbook;
@@ -21,6 +24,14 @@ public class ExcelWriter {
   private HttpServletRequest request;
   private HttpServletResponse response;
 
+  /**
+   * Instantiates a new Excel writer.
+   *
+   * @param workbook the workbook
+   * @param model    the model
+   * @param request  the request
+   * @param response the response
+   */
   public ExcelWriter(Workbook workbook, Map<String, Object> model, HttpServletRequest request,
       HttpServletResponse response) {
     this.workbook = workbook;
@@ -29,6 +40,9 @@ public class ExcelWriter {
     this.response = response;
   }
 
+  /**
+   * Create.
+   */
   public void create() {
     applyFileNameForRequest(mapToFileName());
 

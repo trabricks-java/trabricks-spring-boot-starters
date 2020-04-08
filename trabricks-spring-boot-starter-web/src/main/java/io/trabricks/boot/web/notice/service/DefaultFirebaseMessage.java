@@ -8,8 +8,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * The type Default firebase message.
+ *
  * @author eomjeongjae
- * @since 2019/10/31
+ * @since 2019 /10/31
  */
 @Setter
 @Getter

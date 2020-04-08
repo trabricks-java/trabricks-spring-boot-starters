@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
 
+/**
+ * The type Excel xls view.
+ */
 public class ExcelXlsView extends AbstractXlsView {
 
   @Override

@@ -8,8 +8,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * The type Firebase properties.
+ *
  * @author eomjeongjae
- * @since 2019/10/31
+ * @since 2019 /10/31
  */
 @Setter
 @Getter

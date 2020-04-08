@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
+ * The type Web log interceptor.
+ *
  * @author eomjeongjae
- * @since 2019-02-08
+ * @since 2019 -02-08
  */
 @Slf4j
 public class WebLogInterceptor implements HandlerInterceptor {

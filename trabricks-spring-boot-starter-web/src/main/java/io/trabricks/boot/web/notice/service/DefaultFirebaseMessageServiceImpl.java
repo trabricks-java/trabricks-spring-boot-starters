@@ -23,8 +23,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * The type Default firebase message service.
+ *
  * @author eomjeongjae
- * @since 2019/10/31
+ * @since 2019 /10/31
  */
 @EnableAsync
 @Slf4j
@@ -35,6 +37,9 @@ public class DefaultFirebaseMessageServiceImpl implements FirebaseMessageService
   private final FirebaseProperties firebaseProperties;
   private final ObjectMapper objectMapper;
 
+  /**
+   * Init.
+   */
   @PostConstruct
   public void init() {
     log.info("DefaultFirebaseMessageServiceImpl init");

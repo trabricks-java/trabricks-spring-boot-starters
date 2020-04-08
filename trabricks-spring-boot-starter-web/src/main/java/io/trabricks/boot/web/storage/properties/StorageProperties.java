@@ -6,8 +6,10 @@ import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
+ * The type Storage properties.
+ *
  * @author eomjeongjae
- * @since 2019/10/15
+ * @since 2019 /10/15
  */
 @Getter
 @Setter

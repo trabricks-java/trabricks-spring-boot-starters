@@ -15,9 +15,22 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * The type Excel reader.
+ */
 @Slf4j
 public class ExcelReader {
 
+  /**
+   * Read file to list list.
+   *
+   * @param <T>           the type parameter
+   * @param multipartFile the multipart file
+   * @param rowFunc       the row func
+   * @return the list
+   * @throws IOException            the io exception
+   * @throws InvalidFormatException the invalid format exception
+   */
   public <T> List<T> readFileToList(
       final MultipartFile multipartFile,
       final Function<Row, T> rowFunc
