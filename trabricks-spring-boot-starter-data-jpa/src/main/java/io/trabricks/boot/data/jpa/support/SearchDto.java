@@ -55,7 +55,16 @@ public abstract class SearchDto<T> {
    * @return the specification
    */
   public final Specification<T> toSpecification() {
-    return getRestrictions().output();
+    return this.toSpecification(null);
+  }
+
+  /**
+   * To specification specification.
+   *
+   * @return the specification
+   */
+  public final <X extends T> Specification<T> toSpecification(final Class<X> type) {
+    return getRestrictions().output(type);
   }
 
   /**

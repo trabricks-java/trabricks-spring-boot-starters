@@ -263,9 +263,22 @@ public class Restrictions {
    * @param <T> the type parameter
    * @return the specification
    */
-  @SuppressWarnings("serial")
-  public <T> Specification<T> output() {
+  final public <T> Specification<T> output() {
+    return this.output(null);
+  }
+
+  /**
+   * Output specification.
+   *
+   * @param <T> the type parameter
+   * @return the specification
+   */
+  public final <T, X extends T> Specification<T> output(final Class<X> type) {
     Specification<T> spec = (Specification<T>) (root, query, cb) -> {
+      Root<?> _root = root;
+      if (type != null) {
+        _root = cb.treat(root, type);
+      }
 
       List<Predicate> items = Lists.newArrayList();
       List<Order> orders = Lists.newArrayList();
@@ -276,32 +289,32 @@ public class Restrictions {
 
         switch (condition.type) {
           case EQUALS: {
-            items.add(cb.equal(getPath(root, key), object));
+            items.add(cb.equal(getPath(_root, key), object));
             break;
           }
           case EQUAL_PROPERTY: {
-            items.add(cb.equal(getPath(root, key), getPath(root, object.toString())));
+            items.add(cb.equal(getPath(_root, key), getPath(_root, object.toString())));
             break;
           }
           case NOT_EQUAL: {
-            items.add(cb.notEqual(getPath(root, key), object));
+            items.add(cb.notEqual(getPath(_root, key), object));
             break;
           }
           case LIKE: {
-            items.add(cb.like(getPath(root, key), (String) object));
+            items.add(cb.like(getPath(_root, key), (String) object));
             break;
           }
           case IS_NULL: {
-            items.add(cb.isNull(getPath(root, key)));
+            items.add(cb.isNull(getPath(_root, key)));
             break;
           }
           case IS_NOT_NULL: {
-            items.add(cb.isNotNull(getPath(root, key)));
+            items.add(cb.isNotNull(getPath(_root, key)));
             break;
           }
           case STR_IN: {
             Predicate p = null;
-            Path<String> field = getPath(root, key);
+            Path<String> field = getPath(_root, key);
 
             Iterator itr = ((Collection) object).iterator();
             while (itr.hasNext()) {
@@ -314,7 +327,7 @@ public class Restrictions {
             break;
           }
           case IN: {
-            final Path<Group> group = getPath(root, key);
+            final Path<Group> group = getPath(_root, key);
             if (Collection.class.isAssignableFrom(object.getClass())) {
               items.add(group.in((Collection) object));
             } else {
@@ -323,48 +336,48 @@ public class Restrictions {
             break;
           }
           case NOT_IN: {
-            final Path<Group> group = getPath(root, key);
+            final Path<Group> group = getPath(_root, key);
             items.add(group.in((Collection) object).not());
             break;
           }
           case LESS_THAN_OR_EQUAL_TO: {
             if (object instanceof Date) {
               items.add(
-                  cb.lessThanOrEqualTo(Restrictions.getPath(root, key), (Date) object));
+                  cb.lessThanOrEqualTo(Restrictions.getPath(_root, key), (Date) object));
             } else if (object instanceof LocalDateTime) {
-              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(root, key),
+              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(_root, key),
                   (LocalDateTime) object));
             } else if (object instanceof LocalDate) {
-              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(root, key),
+              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(_root, key),
                   (LocalDate) object));
             } else if (object instanceof LocalTime) {
-              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(root, key),
+              items.add(cb.lessThanOrEqualTo(Restrictions.getPath(_root, key),
                   (LocalTime) object));
             } else {
-              items.add(cb.le(Restrictions.getPath(root, key), (Number) object));
+              items.add(cb.le(Restrictions.getPath(_root, key), (Number) object));
             }
             break;
           }
           case GREATER_THAN_OR_EQUAL_TO: {
             if (object instanceof Date) {
               items.add(
-                  cb.greaterThanOrEqualTo(Restrictions.getPath(root, key), (Date) object));
+                  cb.greaterThanOrEqualTo(Restrictions.getPath(_root, key), (Date) object));
             } else if (object instanceof LocalDateTime) {
-              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(root, key),
+              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(_root, key),
                   (LocalDateTime) object));
             } else if (object instanceof LocalDate) {
-              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(root, key),
+              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(_root, key),
                   (LocalDate) object));
             } else if (object instanceof LocalTime) {
-              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(root, key),
+              items.add(cb.greaterThanOrEqualTo(Restrictions.getPath(_root, key),
                   (LocalTime) object));
             } else {
-              items.add(cb.ge(Restrictions.getPath(root, key), (Number) object));
+              items.add(cb.ge(Restrictions.getPath(_root, key), (Number) object));
             }
             break;
           }
           case LESS_THAN_OR_IS_NULL: {
-            Path path = getPath(root, key);
+            Path path = getPath(_root, key);
             if (object instanceof Date) {
               items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (Date) object)));
             } else if (object instanceof LocalDateTime) {
@@ -380,7 +393,7 @@ public class Restrictions {
             break;
           }
           case GREATER_THAN_OR_IS_NULL: {
-            Path path = getPath(root, key);
+            Path path = getPath(_root, key);
             if (object instanceof Date) {
               items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (Date) object)));
             } else if (object instanceof LocalDateTime) {
@@ -399,29 +412,29 @@ public class Restrictions {
           }
           case BETWEEN: {
             if (object instanceof Date) {
-              items.add(cb.between(Restrictions.<Date>getPath(root, key), (Date) object,
+              items.add(cb.between(Restrictions.<Date>getPath(_root, key), (Date) object,
                   (Date) object2));
             } else if (LocalDateTime.class.isAssignableFrom(object.getClass())) {
-              items.add(cb.between(Restrictions.getPath(root, key), (LocalDateTime) object,
+              items.add(cb.between(Restrictions.getPath(_root, key), (LocalDateTime) object,
                   (LocalDateTime) object2));
             } else if (LocalDate.class.isAssignableFrom(object.getClass())) {
-              items.add(cb.between(Restrictions.getPath(root, key), (LocalDate) object,
+              items.add(cb.between(Restrictions.getPath(_root, key), (LocalDate) object,
                   (LocalDate) object2));
             } else if (LocalTime.class.isAssignableFrom(object.getClass())) {
-              items.add(cb.between(Restrictions.getPath(root, key), (LocalTime) object,
+              items.add(cb.between(Restrictions.getPath(_root, key), (LocalTime) object,
                   (LocalTime) object2));
             } else {
               items.add(
-                  cb.between(Restrictions.getPath(root, key), (Double) object, (Double) object2));
+                  cb.between(Restrictions.getPath(_root, key), (Double) object, (Double) object2));
             }
             break;
           }
 
           case ORDER: {
             if (object == Direction.DESC) {
-              orders.add(cb.desc(getPath(root, key)));
+              orders.add(cb.desc(getPath(_root, key)));
             } else {
-              orders.add(cb.asc(getPath(root, key)));
+              orders.add(cb.asc(getPath(_root, key)));
             }
             break;
           }
@@ -461,12 +474,11 @@ public class Restrictions {
 
     if (children.size() > 0) {
       for (Restrictions child : children) {
-        spec = (currCon == Conn.AND) ? spec.and(child.output()) : spec.or(child.output());
+        Specification<T> output = type != null ? child.output(type) : child.output();
+        spec = (currCon == Conn.AND) ? spec.and(output) : spec.or(output);
       }
     }
-
     return spec;
-
   }
 
 
