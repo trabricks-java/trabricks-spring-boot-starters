@@ -17,7 +17,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -92,6 +94,11 @@ public class AuthorizationServerAutoConfiguration extends AuthorizationServerCon
   public JwtAccessTokenConverter accessTokenConverter() {
     JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
     converter.setSigningKey(webSecurityProperties.getOauth().getTokenSigningKey());
+    DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+    DefaultUserAuthenticationConverter userTokenConverter = new DefaultUserAuthenticationConverter();
+    userTokenConverter.setUserDetailsService(userDetailsService);
+    accessTokenConverter.setUserTokenConverter(userTokenConverter);
+    converter.setAccessTokenConverter(accessTokenConverter);
     return converter;
   }
 
